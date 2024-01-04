@@ -1,0 +1,4 @@
+.vscode
+prisma
+node_modules
+tsconfig.json
