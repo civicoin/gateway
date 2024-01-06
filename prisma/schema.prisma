@@ -6,3 +6,56 @@ datasource db {
 generator client {
     provider = "prisma-client-js"
 }
+
+model System {
+    id          String            @id @default(uuid()) @map("_id")
+    name        String
+    description String?
+    coin        String
+    restriction SystemRestriction
+    core        String
+    issuance    Issuance
+    password    String
+    status      SystemStatus
+    created     DateTime          @default(now())
+    updated     DateTime          @updatedAt
+    members     Member[]
+}
+
+model Member {
+    id       String       @id @default(uuid()) @map("_id")
+    systemId String
+    system   System       @relation(fields: [systemId], references: [id])
+    name     String
+    password String
+    status   MemberStatus
+    created  DateTime     @default(now())
+    updated  DateTime     @updatedAt
+}
+
+enum SystemRestriction {
+    PRIVATE
+    PUBLIC
+}
+
+type Issuance {
+    type  IssuanceType
+    limit Int?
+}
+
+enum IssuanceType {
+    LIMITED
+    UNLIMITED
+}
+
+enum SystemStatus {
+    ACTIVE
+    DELETED
+}
+
+enum MemberStatus {
+    VALIDATING
+    REJECTED
+    ACTIVE
+    DELETED
+}

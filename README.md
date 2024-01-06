@@ -50,3 +50,8 @@ MONGO_DATABASE=gateway
 MONGODB_URL=mongodb://mongo:pass@localhost:27701,localhost:27702/gateway?replicaSet=mongo-set
 
 ```
+
+# WTF is going on here?
+
+- **Prisma** is used instead of **mongoose** for database substitutability
+- At Mongo we use `UUID` instead of `ObjectId` because of easy compatibility with Postgres at other services, which has to store systems and members ids
