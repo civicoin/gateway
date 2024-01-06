@@ -20,6 +20,8 @@ After schema update run `prisma db push`
 
 Firstly, install Node packages — `npm i`
 
+Generate Prisma schema — `npx prisma generate`
+
 ### Mongo init
 
 MongoDB works as a replicas set (it makes service more resilient to database failures and is required by Mongo Transactions, which Prisma uses)

@@ -13,7 +13,7 @@ model System {
     description String?
     coin        String
     restriction SystemRestriction
-    core        String
+    core        Core
     issuance    Issuance
     password    String
     status      SystemStatus
@@ -36,6 +36,10 @@ model Member {
 enum SystemRestriction {
     PRIVATE
     PUBLIC
+}
+
+enum Core {
+    CORE
 }
 
 type Issuance {

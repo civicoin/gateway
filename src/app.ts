@@ -1,7 +1,12 @@
 import chalk from 'chalk'
 import dotenv from 'dotenv'
+import { JsonSchema } from 'fastify-zod'
 import fjwt, { FastifyJWT } from '@fastify/jwt'
 import fastify, { FastifyReply, FastifyRequest } from 'fastify'
+
+import systemRoutes from './api/system/system.route.js'
+
+import { systemSchemas } from './api/system/system.schema.js'
 
 dotenv.config()
 
@@ -25,7 +30,12 @@ app.decorate('authenticate', async (req: FastifyRequest, reply: FastifyReply) =>
 	}
 })
 
+const addSchemas = (schemas: JsonSchema[]) => schemas.forEach(schema => app.addSchema(schema))
+
 const main = async () => {
+	;[systemSchemas].forEach(addSchemas)
+	app.register(systemRoutes, { prefix: '/system' })
+
 	try {
 		const host = process.env.ADDRESS || '0.0.0.0'
 		const port = Number(process.env.PORT || 5000)
