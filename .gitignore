@@ -2,5 +2,6 @@
 build
 .idea
 .vscode
+setup/*key
 node_modules
 package-lock.json

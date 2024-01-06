@@ -1,0 +1,49 @@
+services:
+    mongo1:
+        hostname: mongo1
+        image: gateway-mongo
+        expose:
+            - 27017
+        ports:
+            - 30001:27017
+        # restart: always
+        command: mongod --replSet mongo-set --keyFile /etc/mongo-key
+    mongo2:
+        hostname: mongo2
+        image: gateway-mongo
+        expose:
+            - 27017
+        ports:
+            - 30002:27017
+        # restart: always
+        command: mongod --replSet mongo-set --keyFile /etc/mongo-key
+    mongoInit:
+        image: gateway-mongo
+        restart: "no"
+        depends_on:
+            - mongo1
+            - mongo2
+        command: >
+            bash -c "
+            sleep 10;
+            mongosh --host mongo1:27017 --eval '
+                rs.initiate({
+                _id: \"mongo-set\",
+                members: [
+                    { _id: 0, host: \"mongo1:27017\" },
+                    { _id: 1, host: \"mongo2:27017\" }
+                ]
+                });
+            ';
+            mongosh --host mongo1:27017 --eval '
+                db = db.getSiblingDB(\"$$MONGO_DATABASE\");
+                db.createUser({
+                    user: \"$$MONGO_USER\",
+                    pwd: \"$$MONGO_PASSWORD\",
+                    roles: [{role: \"readWrite\", db: \"$$MONGO_DATABASE\"}]
+                });
+            '"
+        environment:
+            MONGO_USER: ${MONGO_USER}
+            MONGO_PASSWORD: ${MONGO_PASSWORD}
+            MONGO_DATABASE: ${MONGO_DATABASE}

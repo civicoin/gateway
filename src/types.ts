@@ -9,9 +9,19 @@ declare module 'fastify' {
 	}
 }
 
-type UserPayload = {
+interface CommonUserPayload {
 	id: string
 }
+
+interface MemberPayload extends CommonUserPayload {
+	role: 'member'
+}
+
+interface AdminPayload extends CommonUserPayload {
+	role: 'admin'
+}
+
+type UserPayload = MemberPayload | AdminPayload
 
 declare module '@fastify/jwt' {
 	interface FastifyJWT {

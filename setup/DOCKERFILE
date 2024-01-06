@@ -1,0 +1,6 @@
+FROM mongo
+COPY mongo-key /etc/mongo-key
+RUN chown mongodb:mongodb /etc/mongo-key
+RUN chmod 400 /etc/mongo-key
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["mongod"]
