@@ -10,6 +10,12 @@ The main service of Civicoin. Provides API, systems and members management, serv
 
 Dev mode — `npm run dev`
 
+## Schema update
+
+After schema update run `prisma db push`
+
+> Make **on-demand** updates: any new fields added are explicitly defined as optional or with default value
+
 ## Preparation
 
 Firstly, install Node packages — `npm i`
@@ -42,16 +48,18 @@ docker-compose -f ./setup/mongo-compose.yml --env-file .env up
 ## Environment variables
 ```
 SECRET=secret
+
 MONGO_INIT_USERNAME=root
 MONGO_INIT_PASSWORD=root
 MONGO_USERNAME=mongo
 MONGO_PASSWORD=pass
 MONGO_DATABASE=gateway
+
 MONGODB_URL=mongodb://mongo:pass@localhost:27701,localhost:27702/gateway?replicaSet=mongo-set
 
 ```
 
-# WTF is going on here?
+# WTF is going on here
 
 - **Prisma** is used instead of **mongoose** for database substitutability
 - At Mongo we use `UUID` instead of `ObjectId` because of easy compatibility with Postgres at other services, which has to store systems and members ids

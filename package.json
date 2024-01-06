@@ -30,6 +30,7 @@
 	},
 	"dependencies": {
 		"@fastify/jwt": "^7.2.4",
+		"@prisma/client": "^5.7.1",
 		"chalk": "^5.3.0",
 		"dotenv": "^16.3.1",
 		"fastify": "^4.25.2"
