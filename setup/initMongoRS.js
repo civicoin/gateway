@@ -8,8 +8,8 @@ const config = {
 	_id: 'mongo-set',
 	version: 1,
 	members: [
-		{ _id: 1, host: `${m1}:${port}`, priority: 2 },
-		{ _id: 2, host: `${m2}:${port}`, priority: 1 }
+		{ _id: 1, host: `${m1}:${m1_port}`, priority: 2 },
+		{ _id: 2, host: `${m2}:${m2_port}`, priority: 1 }
 	]
 }
 

@@ -3,9 +3,9 @@ services:
         hostname: mongo1
         image: gateway-mongo
         ports:
-            - 30001:27017
+            - 27701:27701
         restart: always
-        command: mongod --bind_ip_all --replSet mongo-set --keyFile /etc/mongo-key
+        command: mongod --bind_ip_all --replSet mongo-set --port 27701 --keyFile /etc/mongo-key
         environment:
             MONGO_INITDB_ROOT_USERNAME: ${MONGO_INIT_USERNAME}
             MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INIT_PASSWORD}
@@ -13,9 +13,9 @@ services:
         hostname: mongo2
         image: gateway-mongo
         ports:
-            - 30002:27017
+            - 27702:27702
         restart: always
-        command: mongod --bind_ip_all --replSet mongo-set --keyFile /etc/mongo-key
+        command: mongod --bind_ip_all --replSet mongo-set --port 27702 --keyFile /etc/mongo-key
         environment:
             MONGO_INITDB_ROOT_USERNAME: ${MONGO_INIT_USERNAME}
             MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INIT_PASSWORD}
