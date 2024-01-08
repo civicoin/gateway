@@ -47,6 +47,17 @@ docker-compose -f ./setup/mongo-compose.yml --env-file .env up
 127.0.0.1 mongo2
 ```
 
+Use `MONGODB_URL` to connect (for example, with [MongoDB Compass](https://www.mongodb.com/products/tools/compass))
+
+### RabbitMQ init
+
+**With Docker:**
+```
+docker run -d --name rabbitmq -p 5672:5672 -p 5673:5673 -p 15672:15672 rabbitmq:management  
+```
+
+Management can then be accessible at `http://127.0.0.1:15672` with the default credentials `guest:guest`
+
 ## Environment variables
 
 Check `.env.example`

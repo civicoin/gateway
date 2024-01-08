@@ -4,6 +4,9 @@ import { JsonSchema } from 'fastify-zod'
 import fjwt, { FastifyJWT } from '@fastify/jwt'
 import fastify, { FastifyReply, FastifyRequest } from 'fastify'
 
+import rabbitmq from './plugins/rabbitmq.js'
+import { RabbitmqQueue } from './utils/rabbitmq.js'
+
 import systemRoutes from './api/system/system.route.js'
 
 import { systemSchemas } from './api/system/system.schema.js'
@@ -15,9 +18,12 @@ if (![JWT_SECRET].every(Boolean)) {
 	throw new Error('Missing necessary environment variables')
 }
 
-const app = fastify({ logger: true })
+const app = fastify({
+	logger: true
+})
 
 app.register(fjwt, { secret: String(JWT_SECRET) })
+app.register(rabbitmq)
 
 app.decorate('authenticate', async (req: FastifyRequest, reply: FastifyReply) => {
 	try {
@@ -27,6 +33,16 @@ app.decorate('authenticate', async (req: FastifyRequest, reply: FastifyReply) =>
 		req.user = decoded
 	} catch (err) {
 		return reply.send(err)
+	}
+})
+
+app.ready(async () => {
+	try {
+		await app.rabbitmq.subscribe(RabbitmqQueue.system, async message => {
+			console.log(chalk.magenta(JSON.stringify(message)))
+		})
+	} catch (err) {
+		app.log.error(err)
 	}
 })
 
