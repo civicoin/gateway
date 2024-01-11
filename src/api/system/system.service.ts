@@ -1,5 +1,5 @@
 import prisma from '../../utils/prisma.js'
-import { hashPassword } from '../../utils/hash.js'
+import { hashPassword } from '../../auth/hash.js'
 import { CreateSystemInput } from './system.schema.js'
 
 const fieldsToSelect = {

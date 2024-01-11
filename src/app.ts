@@ -5,7 +5,7 @@ import fjwt, { FastifyJWT } from '@fastify/jwt'
 import fastify, { FastifyReply, FastifyRequest } from 'fastify'
 
 import rabbitmq from './plugins/rabbitmq.js'
-import { RabbitmqQueue } from './utils/rabbitmq.js'
+import { RabbitMQQueue } from './utils/rabbitmq.js'
 
 import systemRoutes from './api/system/system.route.js'
 
@@ -13,7 +13,7 @@ import { systemSchemas } from './api/system/system.schema.js'
 
 dotenv.config()
 
-const JWT_SECRET = process.env.SECRET
+const JWT_SECRET = process.env.JWT_SECRET
 if (![JWT_SECRET].every(Boolean)) {
 	throw new Error('Missing necessary environment variables')
 }
@@ -21,6 +21,8 @@ if (![JWT_SECRET].every(Boolean)) {
 const app = fastify({
 	logger: true
 })
+
+export const logger = app.log
 
 app.register(fjwt, { secret: String(JWT_SECRET) })
 app.register(rabbitmq)
@@ -38,7 +40,7 @@ app.decorate('authenticate', async (req: FastifyRequest, reply: FastifyReply) =>
 
 app.ready(async () => {
 	try {
-		await app.rabbitmq.subscribe(RabbitmqQueue.system, async message => {
+		await app.rabbitmq.subscribe(RabbitMQQueue.system, async message => {
 			console.log(chalk.magenta(JSON.stringify(message)))
 		})
 	} catch (err) {

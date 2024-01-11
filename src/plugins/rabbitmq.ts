@@ -1,15 +1,9 @@
 import { FastifyInstance } from 'fastify'
 import fastifyPlugin from 'fastify-plugin'
 
-import RabbitMQClient, { RabbitmqQueue } from '../utils/rabbitmq.js'
-
-const tryJsonParse = (message: string): object => {
-	try {
-		return JSON.parse(message)
-	} catch {
-		return {}
-	}
-}
+import { safeJsonParse } from '../utils/data.js'
+import RabbitMQClient, { RabbitMQQueue } from '../utils/rabbitmq.js'
+import { getMessageWithHMAC, verifyMessageWithHMAC } from '../auth/hmac.js'
 
 const rabbitmq = async (fastify: FastifyInstance) => {
 	try {
@@ -17,16 +11,24 @@ const rabbitmq = async (fastify: FastifyInstance) => {
 		const channel = await client.getChannel()
 
 		fastify.decorate('rabbitmq', {
-			publish: async (queue: RabbitmqQueue, message: object) => {
+			publish: async (queue: RabbitMQQueue, message: object) => {
 				await channel.assertQueue(queue, { durable: false })
-				channel.sendToQueue(queue, Buffer.from(JSON.stringify(message)))
+				const messageWithHMAC = getMessageWithHMAC(message)
+
+				channel.sendToQueue(queue, Buffer.from(JSON.stringify(messageWithHMAC)))
 			},
-			subscribe: async (queue: RabbitmqQueue, callback: (message: object) => void) => {
+			subscribe: async (queue: RabbitMQQueue, callback: (message: object) => void) => {
 				await channel.assertQueue(queue, { durable: false })
 				await channel.consume(queue, message => {
 					if (!message) return
+					const parsedMessage = safeJsonParse(message.content.toString())
 
-					callback(tryJsonParse(message.content.toString()))
+					if (verifyMessageWithHMAC(parsedMessage)) {
+						callback(parsedMessage)
+					} else {
+						fastify.log.error('RabbitMQ Consume: Invalid HMAC', parsedMessage)
+					}
+
 					channel.ack(message)
 				})
 			}

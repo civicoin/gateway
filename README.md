@@ -1,10 +1,10 @@
 # Gateway
 
-The main service of Civicoin. Provides API, systems and members management, services orchestration
+The main service of the platform. Provides API, systems and members management, services orchestration
 
 - **Stack:** Node, Fastify, Prisma, zod
 - **DB:** MongoDB
-- Communication with REST and RabbitMQ
+- Communication with REST and RabbitMQ. External auth uses JWT, internal — HMAC
 
 # Development
 

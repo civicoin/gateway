@@ -1,7 +1,7 @@
 import { FastifyBaseLogger } from 'fastify'
 import amqp, { Connection, Channel } from 'amqplib'
 
-export enum RabbitmqQueue {
+export enum RabbitMQQueue {
 	system = 'system'
 }
 
