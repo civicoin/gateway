@@ -16,16 +16,21 @@ declare module 'fastify' {
 	}
 }
 
+export enum UserRole {
+	MEMBER = 'member',
+	ADMIN = 'admin'
+}
+
 interface CommonUserPayload {
 	id: string
 }
 
 interface MemberPayload extends CommonUserPayload {
-	role: 'member'
+	role: UserRole.MEMBER
 }
 
 interface AdminPayload extends CommonUserPayload {
-	role: 'admin'
+	role: UserRole.ADMIN
 }
 
 type UserPayload = MemberPayload | AdminPayload

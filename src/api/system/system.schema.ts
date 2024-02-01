@@ -37,12 +37,24 @@ const createSystemResponseSchema = z.object(
 	})
 )
 
+const loginSystemSchema = z.object({
+	name: z.string(getZodCommonErrorObject('Name')),
+	password: z.string(getZodCommonErrorObject('Password'))
+})
+
+const loginSystemResponseSchema = z.object({
+	access_token: z.string()
+})
+
 export type CreateSystemInput = z.infer<typeof createSystemSchema>
+export type LoginSystemInput = z.infer<typeof loginSystemSchema>
 
 export const { schemas: systemSchemas, $ref } = buildJsonSchemas(
 	{
 		createSystemSchema,
-		createSystemResponseSchema
+		createSystemResponseSchema,
+		loginSystemSchema,
+		loginSystemResponseSchema
 	},
 	{ $id: 'system' }
 )

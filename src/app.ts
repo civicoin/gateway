@@ -18,7 +18,7 @@ if (![JWT_SECRET].every(Boolean)) {
 	throw new Error('Missing necessary environment variables')
 }
 
-const app = fastify({
+export const app = fastify({
 	logger: true
 })
 
