@@ -31,6 +31,8 @@
 	},
 	"dependencies": {
 		"@fastify/jwt": "^7.2.4",
+		"@fastify/swagger": "^8.14.0",
+		"@fastify/swagger-ui": "^2.1.0",
 		"@prisma/client": "^5.7.1",
 		"@types/amqplib": "^0.10.4",
 		"amqplib": "^0.10.3",

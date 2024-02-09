@@ -1,5 +1,7 @@
 import chalk from 'chalk'
 import dotenv from 'dotenv'
+import swagger from '@fastify/swagger'
+import swaggerUi from '@fastify/swagger-ui'
 import { JsonSchema } from 'fastify-zod'
 import fjwt, { FastifyJWT } from '@fastify/jwt'
 import fastify, { FastifyReply, FastifyRequest } from 'fastify'
@@ -18,14 +20,38 @@ if (![JWT_SECRET].every(Boolean)) {
 	throw new Error('Missing necessary environment variables')
 }
 
+const host = process.env.ADDRESS || '0.0.0.0'
+const port = Number(process.env.PORT || 5000)
+const address = `${host}:${port}`
+
 export const app = fastify({
 	logger: true
 })
 
 export const logger = app.log
 
+const swaggerOptions = {
+	swagger: {
+		info: {
+			title: 'Civicoin Gateway API',
+			description: 'API documentation',
+			version: '0.1.0'
+		},
+		host: address,
+		schemes: ['http'],
+		consumes: ['application/json'],
+		produces: ['application/json']
+	}
+}
+
+const swaggerUiOptions = {
+	routePrefix: '/docs'
+}
+
 app.register(fjwt, { secret: String(JWT_SECRET) })
 app.register(rabbitmq)
+app.register(swagger, swaggerOptions)
+app.register(swaggerUi, swaggerUiOptions)
 
 app.decorate('authenticate', async (req: FastifyRequest, reply: FastifyReply) => {
 	try {
@@ -55,9 +81,6 @@ const main = async () => {
 	app.register(systemRoutes, { prefix: '/system' })
 
 	try {
-		const host = process.env.ADDRESS || '0.0.0.0'
-		const port = Number(process.env.PORT || 5000)
-
 		await app.listen({ port, host })
 		console.log(chalk.green.bgBlack(`Server listening on ${host}:${port}`))
 	} catch (err) {

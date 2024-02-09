@@ -8,6 +8,8 @@ const systemRoutes = async (app: FastifyInstance) => {
 		'/',
 		{
 			schema: {
+				description: 'Create a new system',
+				summary: 'Create a new system',
 				body: $ref('createSystemSchema'),
 				response: {
 					201: $ref('createSystemResponseSchema')
@@ -20,6 +22,8 @@ const systemRoutes = async (app: FastifyInstance) => {
 		'/login',
 		{
 			schema: {
+				description: 'Login to a system',
+				summary: 'Login to a system',
 				body: $ref('loginSystemSchema'),
 				response: {
 					200: $ref('loginSystemResponseSchema')
