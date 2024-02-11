@@ -1,8 +1,9 @@
 import chalk from 'chalk'
 import dotenv from 'dotenv'
+import { LoggerOptions } from 'pino'
 import swagger from '@fastify/swagger'
-import swaggerUi from '@fastify/swagger-ui'
 import { JsonSchema } from 'fastify-zod'
+import swaggerUi from '@fastify/swagger-ui'
 import fjwt, { FastifyJWT } from '@fastify/jwt'
 import fastify, { FastifyReply, FastifyRequest } from 'fastify'
 
@@ -10,7 +11,6 @@ import rabbitmq from './plugins/rabbitmq.js'
 import { RabbitMQQueue } from './utils/rabbitmq.js'
 
 import systemRoutes from './api/system/system.route.js'
-
 import { systemSchemas } from './api/system/system.schema.js'
 
 dotenv.config()
@@ -24,8 +24,19 @@ const host = process.env.ADDRESS || '0.0.0.0'
 const port = Number(process.env.PORT || 5000)
 const address = `${host}:${port}`
 
+const devLoggerOptions: LoggerOptions = {
+	transport: {
+		target: 'pino-pretty',
+		options: {
+			colorize: true,
+			translateTime: 'yyyy-mm-dd HH:MM:ss',
+			ignore: 'pid,hostname,reqId'
+		}
+	}
+}
+
 export const app = fastify({
-	logger: true
+	logger: process.env.NODE_ENV === 'production' || devLoggerOptions
 })
 
 export const logger = app.log
@@ -82,7 +93,7 @@ const main = async () => {
 
 	try {
 		await app.listen({ port, host })
-		console.log(chalk.green.bgBlack(`Server listening on ${host}:${port}`))
+		console.log(chalk.green.bgBlack(`Server listening at ${address}`))
 	} catch (err) {
 		app.log.error(err)
 		process.exit(1)

@@ -3,6 +3,8 @@ import { FastifyInstance } from 'fastify'
 import { $ref } from './system.schema.js'
 import { createSystemHandler, loginSystemHandler } from './system.controller.js'
 
+const tags = ['System']
+
 const systemRoutes = async (app: FastifyInstance) => {
 	app.post(
 		'/',
@@ -13,7 +15,8 @@ const systemRoutes = async (app: FastifyInstance) => {
 				body: $ref('createSystemSchema'),
 				response: {
 					201: $ref('createSystemResponseSchema')
-				}
+				},
+				tags
 			}
 		},
 		createSystemHandler
@@ -27,7 +30,8 @@ const systemRoutes = async (app: FastifyInstance) => {
 				body: $ref('loginSystemSchema'),
 				response: {
 					200: $ref('loginSystemResponseSchema')
-				}
+				},
+				tags
 			}
 		},
 		loginSystemHandler

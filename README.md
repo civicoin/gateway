@@ -10,6 +10,8 @@ The main service of the platform. Provides API, systems and members management, 
 
 Dev mode — `npm run dev`
 
+Docs (Swagger) — /docs
+
 ## Schema update
 
 After schema update run `prisma db push`
