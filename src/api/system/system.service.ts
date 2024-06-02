@@ -1,14 +1,16 @@
+import { Core, System, SystemStatus } from '@prisma/client'
+
 import prisma from '../../utils/prisma.js'
 import { hashPassword } from '../../auth/hash.js'
 import { CreateSystemInput } from './system.schema.js'
-import { Core, System, SystemStatus } from '@prisma/client'
 
 const compulsoryFieldsToSelect = {
 	id: true,
 	name: true
 }
 
-const defaultFieldsToSelect = {
+const defaultSystemFieldsToSelect = {
+	...compulsoryFieldsToSelect,
 	description: true,
 	coin: true,
 	restriction: true,
@@ -24,7 +26,7 @@ type FindSystemInput = (Partial<{ name: string; id: string }> &
 export const findSystem = async ({
 	name,
 	id,
-	select = defaultFieldsToSelect
+	select = defaultSystemFieldsToSelect
 }: FindSystemInput): Promise<Partial<System | null>> => {
 	return await prisma.system.findFirst({
 		where: {
@@ -46,7 +48,7 @@ export const createSystem = async (input: CreateSystemInput) => {
 			status: SystemStatus.ACTIVE,
 			password: hashedPassword
 		},
-		select: defaultFieldsToSelect
+		select: defaultSystemFieldsToSelect
 	})
 
 	return system

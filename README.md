@@ -40,7 +40,7 @@ For Windows just copy generated key to `setup` folder
 **Start it using Docker:**
 ```
 docker build -t gateway-mongo -f ./setup/DOCKERFILE setup
-docker-compose -f ./setup/mongo-compose.yml --env-file .env up
+docker-compose -f ./setup/mongo-compose.yml --env-file .env up -d
 ```
 
 **Update `hosts` with mongo containers mapped to localhost:** (*/etc/hosts* or *C:\Windows\System32\drivers\etc\hosts*)

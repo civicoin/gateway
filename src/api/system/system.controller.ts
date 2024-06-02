@@ -1,11 +1,10 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 
-import { createSystem, findSystem } from './system.service.js'
-import { CreateSystemInput, LoginSystemInput } from './system.schema.js'
-import { verifyPassword } from '../../auth/hash.js'
-
 import { app } from '../../app.js'
 import { UserRole } from '../../types.js'
+import { verifyPassword } from '../../auth/hash.js'
+import { createSystem, findSystem } from './system.service.js'
+import { CreateSystemInput, LoginSystemInput } from './system.schema.js'
 
 export const createSystemHandler = async (
 	request: FastifyRequest<{ Body: CreateSystemInput }>,

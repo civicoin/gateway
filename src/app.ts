@@ -11,7 +11,9 @@ import rabbitmq from './plugins/rabbitmq.js'
 import { RabbitMQQueue } from './utils/rabbitmq.js'
 
 import systemRoutes from './api/system/system.route.js'
+import memberRoutes from './api/member/member.route.js'
 import { systemSchemas } from './api/system/system.schema.js'
+import { memberSchemas } from './api/member/member.schema.js'
 
 dotenv.config()
 
@@ -25,6 +27,7 @@ const port = Number(process.env.PORT || 5000)
 const address = `${host}:${port}`
 
 const devLoggerOptions: LoggerOptions = {
+	level: 'warn',
 	transport: {
 		target: 'pino-pretty',
 		options: {
@@ -88,8 +91,9 @@ app.ready(async () => {
 const addSchemas = (schemas: JsonSchema[]) => schemas.forEach(schema => app.addSchema(schema))
 
 const main = async () => {
-	;[systemSchemas].forEach(addSchemas)
+	;[systemSchemas, memberSchemas].forEach(addSchemas)
 	app.register(systemRoutes, { prefix: '/system' })
+	app.register(memberRoutes, { prefix: '/member' })
 
 	try {
 		await app.listen({ port, host })

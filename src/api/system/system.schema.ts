@@ -43,7 +43,7 @@ const loginSystemSchema = z.object({
 })
 
 const loginSystemResponseSchema = z.object({
-	access_token: z.string()
+	accessToken: z.string()
 })
 
 export type CreateSystemInput = z.infer<typeof createSystemSchema>
