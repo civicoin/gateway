@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify'
 
 import { $ref } from './system.schema.js'
-import { createSystemHandler, loginSystemHandler } from './system.controller.js'
+import { createSystemHandler, getSystemHandler, loginSystemHandler } from './system.controller.js'
 
 const tags = ['System']
 
@@ -35,6 +35,20 @@ const systemRoutes = async (app: FastifyInstance) => {
 			}
 		},
 		loginSystemHandler
+	)
+	app.get(
+		'/:id',
+		{
+			schema: {
+				description: 'Get system',
+				summary: 'Get system',
+				response: {
+					200: $ref('systemResponseSchema')
+				},
+				tags
+			}
+		},
+		getSystemHandler
 	)
 }
 

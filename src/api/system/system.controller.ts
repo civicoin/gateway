@@ -6,6 +6,11 @@ import { verifyPassword } from '../../auth/hash.js'
 import { createSystem, findSystem } from './system.service.js'
 import { CreateSystemInput, LoginSystemInput } from './system.schema.js'
 
+const notFoundReply = (reply: FastifyReply) =>
+	reply.code(404).send({
+		message: 'System not found'
+	})
+
 export const createSystemHandler = async (
 	request: FastifyRequest<{ Body: CreateSystemInput }>,
 	reply: FastifyReply
@@ -38,11 +43,7 @@ export const loginSystemHandler = async (
 
 	try {
 		const system = await findSystem({ name: body.name, select: { password: true } })
-		if (!system || !system?.password) {
-			return reply.code(404).send({
-				message: 'System not found'
-			})
-		}
+		if (!system || !system?.password) return notFoundReply(reply)
 
 		const passwordVerified = await verifyPassword(body.password, system.password)
 		if (!passwordVerified) {
@@ -54,6 +55,23 @@ export const loginSystemHandler = async (
 		const toSign = { id: system.id, role: UserRole.ADMIN }
 
 		return reply.code(200).send({ accessToken: app.jwt.sign(toSign) })
+	} catch (err) {
+		request.log.error(err)
+		return reply.code(500).send(err)
+	}
+}
+
+export const getSystemHandler = async (
+	request: FastifyRequest<{ Params: { id: string } }>,
+	reply: FastifyReply
+) => {
+	const { id } = request.params
+
+	try {
+		const system = await findSystem({ id })
+		if (!system) return notFoundReply(reply)
+
+		return reply.code(200).send(system)
 	} catch (err) {
 		request.log.error(err)
 		return reply.code(500).send(err)

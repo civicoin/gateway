@@ -46,6 +46,8 @@ const loginSystemResponseSchema = z.object({
 	accessToken: z.string()
 })
 
+const systemResponseSchema = z.object(withCreatedUpdated({ ...systemCommonFields, id: z.string() }))
+
 export type CreateSystemInput = z.infer<typeof createSystemSchema>
 export type LoginSystemInput = z.infer<typeof loginSystemSchema>
 
@@ -54,7 +56,8 @@ export const { schemas: systemSchemas, $ref } = buildJsonSchemas(
 		createSystemSchema,
 		createSystemResponseSchema,
 		loginSystemSchema,
-		loginSystemResponseSchema
+		loginSystemResponseSchema,
+		systemResponseSchema
 	},
 	{ $id: 'system' }
 )
