@@ -3,8 +3,8 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { app } from '../../app.js'
 import { UserRole } from '../../types.js'
 import { verifyPassword } from '../../auth/hash.js'
-import { createSystem, findSystem } from './system.service.js'
 import { CreateSystemInput, LoginSystemInput } from './system.schema.js'
+import { createSystem, findSystem, findSystems } from './system.service.js'
 
 const notFoundReply = (reply: FastifyReply) =>
 	reply.code(404).send({
@@ -72,6 +72,21 @@ export const getSystemHandler = async (
 		if (!system) return notFoundReply(reply)
 
 		return reply.code(200).send(system)
+	} catch (err) {
+		request.log.error(err)
+		return reply.code(500).send(err)
+	}
+}
+
+export const getSystemsHandler = async (
+	request: FastifyRequest<{ Querystring: { name: string; cursor?: string } }>,
+	reply: FastifyReply
+) => {
+	const { name, cursor } = request.query
+
+	try {
+		const systems = await findSystems({ name, cursor })
+		return reply.code(200).send(systems)
 	} catch (err) {
 		request.log.error(err)
 		return reply.code(500).send(err)

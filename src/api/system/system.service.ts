@@ -3,6 +3,7 @@ import { Core, System, SystemStatus } from '@prisma/client'
 import prisma from '../../utils/prisma.js'
 import { hashPassword } from '../../auth/hash.js'
 import { CreateSystemInput } from './system.schema.js'
+import { CursorBasedPagination, getPrismaOffsetPaginationArgs } from './../../utils/pagination.js'
 
 const compulsoryFieldsToSelect = {
 	id: true,
@@ -34,6 +35,23 @@ export const findSystem = async ({
 			...(id && { id })
 		},
 		select: { ...compulsoryFieldsToSelect, ...select }
+	})
+}
+
+type FindSystemsInput = {
+	name: string
+} & CursorBasedPagination
+
+export const findSystems = async ({ name, pageSize = 10, cursor }: FindSystemsInput) => {
+	return await prisma.system.findMany({
+		...getPrismaOffsetPaginationArgs(cursor, pageSize),
+		where: {
+			name: { contains: name, mode: 'insensitive' }
+		},
+		select: defaultSystemFieldsToSelect,
+		orderBy: {
+			id: 'asc'
+		}
 	})
 }
 

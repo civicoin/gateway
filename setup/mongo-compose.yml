@@ -4,7 +4,7 @@ services:
         image: gateway-mongo
         ports:
             - 27701:27701
-        restart: always
+        restart: on-failure
         command: mongod --bind_ip_all --replSet mongo-set --port 27701 --keyFile /etc/mongo-key
         environment:
             MONGO_INITDB_ROOT_USERNAME: ${MONGO_INIT_USERNAME}
@@ -14,7 +14,7 @@ services:
         image: gateway-mongo
         ports:
             - 27702:27702
-        restart: always
+        restart: on-failure
         command: mongod --bind_ip_all --replSet mongo-set --port 27702 --keyFile /etc/mongo-key
         environment:
             MONGO_INITDB_ROOT_USERNAME: ${MONGO_INIT_USERNAME}
