@@ -13,6 +13,9 @@ declare module 'fastify' {
 			publish: (queue: RabbitMQQueue, message: object) => Promise<void>
 			subscribe: (queue: RabbitMQQueue, callback: (message: object) => void) => Promise<void>
 		}
+		grpc: {
+			core: unknown
+		}
 	}
 }
 

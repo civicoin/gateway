@@ -8,6 +8,7 @@ import fjwt, { FastifyJWT } from '@fastify/jwt'
 import fastify, { FastifyReply, FastifyRequest } from 'fastify'
 
 import rabbitmq from './plugins/rabbitmq.js'
+import grpcClient from './plugins/grpcClient.js'
 import { RabbitMQQueue } from './utils/rabbitmq.js'
 
 import systemRoutes from './api/system/system.route.js'
@@ -64,6 +65,7 @@ const swaggerUiOptions = {
 
 app.register(fjwt, { secret: String(JWT_SECRET) })
 app.register(rabbitmq)
+app.register(grpcClient)
 app.register(swagger, swaggerOptions)
 app.register(swaggerUi, swaggerUiOptions)
 
