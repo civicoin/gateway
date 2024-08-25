@@ -4,7 +4,8 @@ The main service of the platform. Provides API, systems and members management, 
 
 - **Stack:** Node, Fastify, Prisma, zod
 - **DB:** MongoDB
-- Communication with REST and RabbitMQ. External auth uses JWT, internal — HMAC
+- External communication: REST with JWT
+- Internal: gRPC and RabbitMQ with HMAC
 
 # Development
 
@@ -20,7 +21,7 @@ After schema update run `prisma db push`
 
 ## Preparation
 
-Firstly, install Node packages — `npm i`
+First, install Node packages — `npm i`
 
 Generate Prisma schema — `npx prisma generate`
 
@@ -28,7 +29,7 @@ Generate Prisma schema — `npx prisma generate`
 
 MongoDB works as a replicas set (it makes service more resilient to database failures and is required by Mongo Transactions, which Prisma uses)
 
-**Firstly, it’s necessary to generate key file for replicas authentication:**
+**First, it’s necessary to generate the key file for replicas authentication:**
 ```
 openssl rand -base64 756 > ./setup/mongo-key
 ```

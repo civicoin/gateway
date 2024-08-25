@@ -5,7 +5,7 @@ import createGrpcClient from '../utils/grpcClientFactory.js'
 
 const grpcClient = async (fastify: FastifyInstance) => {
 	try {
-		const coreClient = createGrpcClient('core', 'core.proto', 'localhost:50051')
+		const coreClient = createGrpcClient('core', 'core.proto', process.env.CORE_GRPC_URL ?? '')
 
 		fastify.decorate('grpc', {
 			core: coreClient
