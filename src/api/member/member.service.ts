@@ -3,6 +3,12 @@ import { Member, MemberStatus } from '@prisma/client'
 import prisma from '../../utils/prisma.js'
 import { hashPassword } from '../../auth/hash.js'
 import { CreateMemberInput } from './member.schema.js'
+import {
+	decryptDoubleEncryptedPrivateWithSecret,
+	encryptEncryptedPrivateWithSecret,
+	encryptPrivateWithPassword,
+	generateKeys
+} from '../../auth/keys.js'
 
 const compulsoryFieldsToSelect = {
 	id: true,
@@ -39,14 +45,40 @@ export const createMember = async (input: CreateMemberInput) => {
 	const { password } = input
 	const hashedPassword = await hashPassword(password, 10)
 
+	const { privateKey, publicKey } = generateKeys()
+
+	const passwordEncryptedPrivateKeyData = encryptPrivateWithPassword(privateKey, password)
+	const secretPasswordEncryptedPrivateKeyData = encryptEncryptedPrivateWithSecret(
+		passwordEncryptedPrivateKeyData
+	)
+
 	const member = await prisma.member.create({
 		data: {
 			...input,
+			publicKey,
 			status: MemberStatus.ACTIVE,
 			password: hashedPassword
 		},
 		select: defaultMemberFieldsToSelect
 	})
 
+	await prisma.memberPrivateKey.create({
+		data: {
+			memberId: member.id,
+			...secretPasswordEncryptedPrivateKeyData
+		}
+	})
+
 	return member
+}
+
+export const getMemberSecretEncryptedPrivateKey = async (id: string) => {
+	const memberPrivateKeyData = await prisma.memberPrivateKey.findFirst({
+		where: { memberId: id }
+	})
+	if (!memberPrivateKeyData) {
+		return null
+	}
+
+	return decryptDoubleEncryptedPrivateWithSecret(memberPrivateKeyData)
 }

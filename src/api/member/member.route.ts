@@ -1,7 +1,12 @@
 import { FastifyInstance } from 'fastify'
 
 import { $ref } from './member.schema.js'
-import { createMemberHandler, getMemberHandler, loginMemberHandler } from './member.controller.js'
+import {
+	createMemberHandler,
+	getMemberHandler,
+	getMemberPrivateKeyHandler,
+	loginMemberHandler
+} from './member.controller.js'
 
 const tags = ['Member']
 
@@ -37,19 +42,47 @@ const memberRoutes = async (app: FastifyInstance) => {
 		loginMemberHandler
 	),
 		app.get(
-			'/:find',
+			'/private/:id',
 			{
 				schema: {
-					description: 'Get member of authed system',
-					summary: 'Get member of authed system',
+					description: 'Get member private key',
+					summary: 'Get member private key',
+					params: {
+						type: 'object',
+						properties: {
+							id: { type: 'string' }
+						}
+					},
 					response: {
-						200: $ref('memberResponseSchema')
+						200: {
+							type: 'object',
+							properties: {
+								encryptedPrivateKey: { type: 'string' },
+								iv: { type: 'string' },
+								salt: { type: 'string' },
+								authTag: { type: 'string' }
+							}
+						}
 					},
 					tags
 				}
 			},
-			getMemberHandler
+			getMemberPrivateKeyHandler
 		)
+	app.get(
+		'/:find',
+		{
+			schema: {
+				description: 'Get member of authed system',
+				summary: 'Get member of authed system',
+				response: {
+					200: $ref('memberResponseSchema')
+				},
+				tags
+			}
+		},
+		getMemberHandler
+	)
 	// response: {
 	//     200: {
 	//         type: 'array',

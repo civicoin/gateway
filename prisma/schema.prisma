@@ -9,7 +9,7 @@ generator client {
 
 model System {
     id          String            @id @default(uuid()) @map("_id")
-    name        String
+    name        String            @unique
     description String?
     coin        String
     restriction SystemRestriction
@@ -19,18 +19,39 @@ model System {
     status      SystemStatus
     created     DateTime          @default(now())
     updated     DateTime          @updatedAt
+    decimals    Int               @default(2)
     members     Member[]
 }
 
 model Member {
-    id       String       @id @default(uuid()) @map("_id")
+    id       String @id @default(uuid()) @map("_id")
+    system   System @relation(fields: [systemId], references: [id])
     systemId String
-    system   System       @relation(fields: [systemId], references: [id])
     name     String
     password String
-    status   MemberStatus
-    created  DateTime     @default(now())
-    updated  DateTime     @updatedAt
+
+    publicKey  String?
+    privateKey MemberPrivateKey?
+
+    status  MemberStatus
+    created DateTime     @default(now())
+    updated DateTime     @updatedAt
+
+    @@unique(name: "systemName", [systemId, name])
+}
+
+model MemberPrivateKey {
+    id                  String   @id @default(uuid()) @map("_id")
+    encryptedPrivateKey String
+    innerIv             String
+    innerSalt           String
+    innerAuthTag        String
+    outerIv             String
+    outerAuthTag        String
+    created             DateTime @default(now())
+
+    member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+    memberId String @unique
 }
 
 enum SystemRestriction {

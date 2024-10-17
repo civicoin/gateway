@@ -5,7 +5,12 @@ import { UserRole } from '../../types.js'
 import { verifyPassword } from '../../auth/hash.js'
 import { findSystem } from '../system/system.service.js'
 import { CreateMemberInput, LoginMemberInput } from './member.schema.js'
-import { createMember, defaultMemberFieldsToSelect, findMember } from './member.service.js'
+import {
+	createMember,
+	defaultMemberFieldsToSelect,
+	findMember,
+	getMemberSecretEncryptedPrivateKey
+} from './member.service.js'
 
 export const createMemberHandler = async (
 	request: FastifyRequest<{ Body: CreateMemberInput }>,
@@ -102,6 +107,23 @@ export const getMemberHandler = async (
 		}
 
 		return reply.code(200).send(member)
+	} catch (err) {
+		request.log.error(err)
+		return reply.code(500).send(err)
+	}
+}
+
+export const getMemberPrivateKeyHandler = async (
+	request: FastifyRequest<{ Params: { id: string } }>,
+	reply: FastifyReply
+) => {
+	const { id } = request.params
+
+	try {
+		const privateKeyData = await getMemberSecretEncryptedPrivateKey(id)
+		console.log(privateKeyData)
+
+		return reply.code(200).send(privateKeyData)
 	} catch (err) {
 		request.log.error(err)
 		return reply.code(500).send(err)

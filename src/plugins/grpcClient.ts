@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify'
-import fastifyPlugin from 'fastify-plugin';
+import fastifyPlugin from 'fastify-plugin'
 
 import createGrpcClient from '../utils/grpcClientFactory.js'
 
