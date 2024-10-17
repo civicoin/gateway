@@ -1,6 +1,5 @@
 import chalk from 'chalk'
 import dotenv from 'dotenv'
-import { LoggerOptions } from 'pino'
 import swagger from '@fastify/swagger'
 import { JsonSchema } from 'fastify-zod'
 import swaggerUi from '@fastify/swagger-ui'
@@ -27,7 +26,7 @@ const host = process.env.ADDRESS || '0.0.0.0'
 const port = Number(process.env.PORT || 5000)
 const address = `${host}:${port}`
 
-const devLoggerOptions: LoggerOptions = {
+const devLoggerOptions = {
 	level: 'warn',
 	transport: {
 		target: 'pino-pretty',
