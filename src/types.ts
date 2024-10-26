@@ -1,14 +1,12 @@
-import { JWT } from '@fastify/jwt'
-
 import { RabbitMQQueue } from './utils/rabbitmq.js'
 
 declare module 'fastify' {
 	interface FastifyRequest {
-		jwt: JWT
+		user: UserPayload
 	}
 
 	export interface FastifyInstance {
-		authenticate: unknown
+		authenticate: (request: FastifyRequest, reply: FastifyReply) => Promise<void>
 		rabbitmq: {
 			publish: (queue: RabbitMQQueue, message: object) => Promise<void>
 			subscribe: (queue: RabbitMQQueue, callback: (message: object) => void) => Promise<void>
@@ -36,7 +34,7 @@ interface AdminPayload extends CommonUserPayload {
 	role: UserRole.ADMIN
 }
 
-type UserPayload = MemberPayload | AdminPayload
+export type UserPayload = MemberPayload | AdminPayload
 
 declare module '@fastify/jwt' {
 	interface FastifyJWT {

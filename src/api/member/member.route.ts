@@ -40,35 +40,30 @@ const memberRoutes = async (app: FastifyInstance) => {
 			}
 		},
 		loginMemberHandler
-	),
-		app.get(
-			'/private/:id',
-			{
-				schema: {
-					description: 'Get member private key',
-					summary: 'Get member private key',
-					params: {
+	)
+	app.get(
+		'/private',
+		{
+			preHandler: [app.authenticate],
+			schema: {
+				description: 'Get member private key',
+				summary: 'Get member private key',
+				response: {
+					200: {
 						type: 'object',
 						properties: {
-							id: { type: 'string' }
+							encryptedPrivateKey: { type: 'string' },
+							iv: { type: 'string' },
+							salt: { type: 'string' },
+							authTag: { type: 'string' }
 						}
-					},
-					response: {
-						200: {
-							type: 'object',
-							properties: {
-								encryptedPrivateKey: { type: 'string' },
-								iv: { type: 'string' },
-								salt: { type: 'string' },
-								authTag: { type: 'string' }
-							}
-						}
-					},
-					tags
-				}
-			},
-			getMemberPrivateKeyHandler
-		)
+					}
+				},
+				tags
+			}
+		},
+		getMemberPrivateKeyHandler
+	)
 	app.get(
 		'/:find',
 		{

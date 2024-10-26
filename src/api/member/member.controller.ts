@@ -113,11 +113,8 @@ export const getMemberHandler = async (
 	}
 }
 
-export const getMemberPrivateKeyHandler = async (
-	request: FastifyRequest<{ Params: { id: string } }>,
-	reply: FastifyReply
-) => {
-	const { id } = request.params
+export const getMemberPrivateKeyHandler = async (request: FastifyRequest, reply: FastifyReply) => {
+	const { id } = request.user
 
 	try {
 		const privateKeyData = await getMemberSecretEncryptedPrivateKey(id)

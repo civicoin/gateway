@@ -45,7 +45,7 @@ const systemRoutes = async (app: FastifyInstance) => {
 		'/',
 		{
 			schema: {
-				description: 'Find schemas by name',
+				description: 'Find systems by name',
 				summary: 'Get systems',
 				response: {
 					200: {

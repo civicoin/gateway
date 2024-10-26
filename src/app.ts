@@ -1,11 +1,12 @@
 import chalk from 'chalk'
 import dotenv from 'dotenv'
+import fjwt from '@fastify/jwt'
 import swagger from '@fastify/swagger'
 import { JsonSchema } from 'fastify-zod'
 import swaggerUi from '@fastify/swagger-ui'
-import fjwt, { FastifyJWT } from '@fastify/jwt'
 import fastify, { FastifyReply, FastifyRequest } from 'fastify'
 
+import { UserPayload } from './types.js'
 import rabbitmq from './plugins/rabbitmq.js'
 import grpcClient from './plugins/grpcClient.js'
 import { RabbitMQQueue } from './utils/rabbitmq.js'
@@ -70,10 +71,8 @@ app.register(swaggerUi, swaggerUiOptions)
 
 app.decorate('authenticate', async (req: FastifyRequest, reply: FastifyReply) => {
 	try {
-		const token = ''
-		const decoded = req.jwt.verify<FastifyJWT['user']>(token)
-
-		req.user = decoded
+		const decoded = await req.jwtVerify()
+		req.user = decoded as UserPayload
 	} catch (err) {
 		return reply.send(err)
 	}
