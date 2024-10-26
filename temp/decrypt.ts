@@ -67,7 +67,7 @@ async function decryptClientSide(
 	}
 }
 
-// here is the result from localhost:5000/member/private/c425a176-755a-494b-b5ff-036412e9f823
+// here is the result from localhost:5000/member/private for c425a176-755a-494b-b5ff-036412e9f823
 export const checkDecrypt = async () => {
 	const res = await decryptClientSide(
 		'937cdafd34a742a75a77a818e82983a39b9c6f165327994bba8c977eef5abe9c224f5a60c264134ff2acab8aea5f8d871a1c1e9db9d90538ac230a1843f8d428',

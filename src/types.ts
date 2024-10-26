@@ -1,3 +1,5 @@
+import { RouteGenericInterface } from 'fastify'
+
 import { RabbitMQQueue } from './utils/rabbitmq.js'
 
 declare module 'fastify' {
@@ -6,7 +8,10 @@ declare module 'fastify' {
 	}
 
 	export interface FastifyInstance {
-		authenticate: (request: FastifyRequest, reply: FastifyReply) => Promise<void>
+		authenticate: <T extends RouteGenericInterface = RouteGenericInterface>(
+			request: FastifyRequest<T>,
+			reply: FastifyReply
+		) => Promise<void>
 		rabbitmq: {
 			publish: (queue: RabbitMQQueue, message: object) => Promise<void>
 			subscribe: (queue: RabbitMQQueue, callback: (message: object) => void) => Promise<void>
