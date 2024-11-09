@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 
-import { app } from '../../app.js'
+import { app } from '../../server.js'
 import { UserRole } from '../../types.js'
 import { verifyPassword } from '../../auth/hash.js'
 import { CreateSystemInput, LoginSystemInput } from './system.schema.js'

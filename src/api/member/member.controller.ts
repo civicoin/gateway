@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 
-import { app } from '../../app.js'
+import { app } from '../../server.js'
 import { UserRole } from '../../types.js'
 import { verifyPassword } from '../../auth/hash.js'
 import { findSystem } from '../system/system.service.js'
