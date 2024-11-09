@@ -502,11 +502,11 @@
     },
     "/member/login": {
       "post": {
-        "summary": "Login to a member",
+        "summary": "Login to system as member",
         "tags": [
           "Member"
         ],
-        "description": "Login to a member",
+        "description": "Login to system as member",
         "requestBody": {
           "content": {
             "application/json": {
