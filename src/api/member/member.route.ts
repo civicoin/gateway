@@ -30,8 +30,8 @@ const memberRoutes = async (app: FastifyInstance) => {
 		'/login',
 		{
 			schema: {
-				description: 'Login to a member',
-				summary: 'Login to a member',
+				description: 'Login to system as member',
+				summary: 'Login to system as member',
 				body: $ref('loginMemberSchema'),
 				response: {
 					200: $ref('loginMemberResponseSchema')

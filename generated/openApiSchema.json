@@ -1,0 +1,628 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Civicoin Gateway API",
+    "description": "API documentation",
+    "version": "0.1.0"
+  },
+  "components": {
+    "schemas": {
+      "def-0": {
+        "type": "object",
+        "properties": {
+          "createSystemSchema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "coin": {
+                "type": "string"
+              },
+              "restriction": {
+                "type": "string",
+                "enum": [
+                  "PUBLIC",
+                  "PRIVATE"
+                ]
+              },
+              "issuance": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "LIMITED",
+                      "UNLIMITED"
+                    ]
+                  },
+                  "limit": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": false
+              },
+              "password": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "coin",
+              "restriction",
+              "issuance",
+              "password"
+            ],
+            "additionalProperties": false
+          },
+          "createSystemResponseSchema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "$ref": "#/components/schemas/def-0/properties/createSystemSchema/properties/name"
+              },
+              "description": {
+                "$ref": "#/components/schemas/def-0/properties/createSystemSchema/properties/description"
+              },
+              "coin": {
+                "$ref": "#/components/schemas/def-0/properties/createSystemSchema/properties/coin"
+              },
+              "restriction": {
+                "$ref": "#/components/schemas/def-0/properties/createSystemSchema/properties/restriction"
+              },
+              "issuance": {
+                "$ref": "#/components/schemas/def-0/properties/createSystemSchema/properties/issuance"
+              },
+              "core": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "created": {
+                "type": "string"
+              },
+              "updated": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "coin",
+              "restriction",
+              "issuance",
+              "core",
+              "id",
+              "created",
+              "updated"
+            ],
+            "additionalProperties": false
+          },
+          "loginSystemSchema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "password"
+            ],
+            "additionalProperties": false
+          },
+          "loginSystemResponseSchema": {
+            "type": "object",
+            "properties": {
+              "accessToken": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "accessToken"
+            ],
+            "additionalProperties": false
+          },
+          "systemResponseSchema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "$ref": "#/components/schemas/def-0/properties/createSystemSchema/properties/name"
+              },
+              "description": {
+                "$ref": "#/components/schemas/def-0/properties/createSystemSchema/properties/description"
+              },
+              "coin": {
+                "$ref": "#/components/schemas/def-0/properties/createSystemSchema/properties/coin"
+              },
+              "restriction": {
+                "$ref": "#/components/schemas/def-0/properties/createSystemSchema/properties/restriction"
+              },
+              "issuance": {
+                "$ref": "#/components/schemas/def-0/properties/createSystemSchema/properties/issuance"
+              },
+              "id": {
+                "type": "string"
+              },
+              "created": {
+                "type": "string"
+              },
+              "updated": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "coin",
+              "restriction",
+              "issuance",
+              "id",
+              "created",
+              "updated"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "createSystemSchema",
+          "createSystemResponseSchema",
+          "loginSystemSchema",
+          "loginSystemResponseSchema",
+          "systemResponseSchema"
+        ],
+        "additionalProperties": false,
+        "title": "system"
+      },
+      "def-1": {
+        "type": "object",
+        "properties": {
+          "createMemberSchema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "systemId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "password": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "systemId",
+              "password"
+            ],
+            "additionalProperties": false
+          },
+          "createMemberResponseSchema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "$ref": "#/components/schemas/def-1/properties/createMemberSchema/properties/name"
+              },
+              "id": {
+                "type": "string"
+              },
+              "created": {
+                "type": "string"
+              },
+              "updated": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "id",
+              "created",
+              "updated"
+            ],
+            "additionalProperties": false
+          },
+          "loginMemberSchema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "systemId": {
+                "$ref": "#/components/schemas/def-1/properties/createMemberSchema/properties/systemId"
+              },
+              "password": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "systemId",
+              "password"
+            ],
+            "additionalProperties": false
+          },
+          "loginMemberResponseSchema": {
+            "type": "object",
+            "properties": {
+              "accessToken": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "accessToken"
+            ],
+            "additionalProperties": false
+          },
+          "memberResponseSchema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "$ref": "#/components/schemas/def-1/properties/createMemberSchema/properties/name"
+              },
+              "id": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "VALIDATING",
+                  "REJECTED",
+                  "ACTIVE",
+                  "DELETED"
+                ]
+              },
+              "system": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "name"
+                ],
+                "additionalProperties": false
+              },
+              "created": {
+                "type": "string"
+              },
+              "updated": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "id",
+              "status",
+              "system",
+              "created",
+              "updated"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "createMemberSchema",
+          "createMemberResponseSchema",
+          "loginMemberSchema",
+          "loginMemberResponseSchema",
+          "memberResponseSchema"
+        ],
+        "additionalProperties": false,
+        "title": "member"
+      },
+      "def-2": {
+        "type": "object",
+        "properties": {
+          "sendTxSchema": {
+            "type": "object",
+            "properties": {
+              "receiverId": {
+                "type": "string"
+              },
+              "amount": {
+                "type": "string"
+              },
+              "signature": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "receiverId",
+              "amount",
+              "signature"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "sendTxSchema"
+        ],
+        "additionalProperties": false,
+        "title": "tx"
+      }
+    }
+  },
+  "paths": {
+    "/system/": {
+      "post": {
+        "summary": "Create a new system",
+        "tags": [
+          "System"
+        ],
+        "description": "Create a new system",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/def-0/properties/createSystemSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/def-0/properties/createSystemResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Get systems",
+        "tags": [
+          "System"
+        ],
+        "description": "Find systems by name",
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/def-0/properties/systemResponseSchema"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/login": {
+      "post": {
+        "summary": "Login to a system",
+        "tags": [
+          "System"
+        ],
+        "description": "Login to a system",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/def-0/properties/loginSystemSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/def-0/properties/loginSystemResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/{id}": {
+      "get": {
+        "summary": "Get system",
+        "tags": [
+          "System"
+        ],
+        "description": "Get system",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/def-0/properties/systemResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/member/": {
+      "post": {
+        "summary": "Create a new member",
+        "tags": [
+          "Member"
+        ],
+        "description": "Create a new member",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/def-1/properties/createMemberSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/def-1/properties/createMemberResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/member/login": {
+      "post": {
+        "summary": "Login to a member",
+        "tags": [
+          "Member"
+        ],
+        "description": "Login to a member",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/def-1/properties/loginMemberSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/def-1/properties/loginMemberResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/member/private": {
+      "get": {
+        "summary": "Get member private key",
+        "tags": [
+          "Member"
+        ],
+        "description": "Get member private key",
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "encryptedPrivateKey": {
+                      "type": "string"
+                    },
+                    "iv": {
+                      "type": "string"
+                    },
+                    "salt": {
+                      "type": "string"
+                    },
+                    "authTag": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/member/{find}": {
+      "get": {
+        "summary": "Get member of authed system",
+        "tags": [
+          "Member"
+        ],
+        "description": "Get member of authed system",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "find",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/def-1/properties/memberResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tx/send": {
+      "post": {
+        "summary": "Send coins to another member",
+        "tags": [
+          "Transaction"
+        ],
+        "description": "Send coins to another member",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/def-2/properties/sendTxSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://localhost:5000"
+    }
+  ]
+}

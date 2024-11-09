@@ -12,7 +12,7 @@
 	"plugins": ["@typescript-eslint", "perfectionist"],
 	"rules": {
 		"perfectionist/sort-imports": [
-			"error",
+			"warn",
 			{
 				"type": "line-length",
 				"order": "asc",
