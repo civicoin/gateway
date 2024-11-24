@@ -8,7 +8,7 @@ import fastify, { FastifyReply, FastifyRequest } from 'fastify'
 
 import { UserPayload } from './types.js'
 import rabbitmq from './plugins/rabbitmq.js'
-import grpcClient from './plugins/grpcClient.js'
+import grpcClients from './plugins/grpcClient.js'
 import { RabbitMQQueue } from './utils/rabbitmq.js'
 
 import txRoutes from './api/transaction/tx.route.js'
@@ -67,7 +67,7 @@ const swaggerUiOptions = {
 
 app.register(fjwt, { secret: String(JWT_SECRET) })
 app.register(rabbitmq)
-app.register(grpcClient)
+app.register(grpcClients)
 app.register(swagger, swaggerOptions)
 app.register(swaggerUi, swaggerUiOptions)
 
@@ -75,6 +75,18 @@ app.decorate('authenticate', async (req: FastifyRequest, reply: FastifyReply) =>
 	try {
 		const decoded = await req.jwtVerify()
 		req.user = decoded as UserPayload
+	} catch (err) {
+		return reply.send(err)
+	}
+})
+
+app.decorate('core', async (req: FastifyRequest, reply: FastifyReply) => {
+	try {
+		// appropriate for system service
+		// const systemId = req.user.systemId
+		const grpcCoreService = app.grpc.coreClients.Core
+
+		req.core = grpcCoreService
 	} catch (err) {
 		return reply.send(err)
 	}

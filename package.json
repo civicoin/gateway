@@ -12,7 +12,9 @@
 		"lint": "eslint . --ext .ts",
 		"format": "prettier --write \"src/**/*.{ts,tsx,json}\"",
 		"clean": "rm -rf dist/",
-		"prebuild": "npm run clean"
+		"prebuild": "npm run clean",
+		"proto:clear": "rm -rf src/generated && mkdir src/generated",
+		"proto:generate": "npm run proto:clear && grpc_tools_node_protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --js_out=import_style=commonjs,binary:./src/generated --ts_out=grpc_js:./src/generated --grpc_out=grpc_js:./src/generated -I ./node_modules/civi/protos/ ./node_modules/civi/protos/core.proto"
 	},
 	"repository": "https://github.com/civicoin/gateway.git",
 	"author": "Civicoin",
@@ -25,6 +27,8 @@
 		"@typescript-eslint/eslint-plugin": "6.17.0",
 		"@typescript-eslint/parser": "6.17.0",
 		"civi": "git://github.com/civicoin/civi.git",
+		"grpc_tools_node_protoc_ts": "5.3.3",
+		"grpc-tools": "1.12.4",
 		"eslint": "8.56.0",
 		"eslint-config-prettier": "9.1.0",
 		"eslint-plugin-perfectionist": "2.5.0",

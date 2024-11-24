@@ -12,16 +12,21 @@ const defaultProtoOptions = {
 	oneofs: true
 }
 
-const createGrpcClient = (serviceName: string, protoFilename: string, address: string) => {
+const createGrpcClient = <T>(serviceName: string, protoFilename: string, address: string): T => {
 	const packageDefinition = protoLoader.loadSync(
 		path.resolve(CIVI_PROTO_FILES_PATH, protoFilename),
 		defaultProtoOptions
 	)
 
 	const protoDescriptor = grpc.loadPackageDefinition(packageDefinition)
+
+	if (!protoDescriptor || !(serviceName in protoDescriptor)) {
+		throw new Error(`Service "${serviceName}" not found in proto file "${protoFilename}"`)
+	}
+
 	const Service = protoDescriptor[serviceName] as ServiceClientConstructor
 
-	return new Service(address, grpc.credentials.createInsecure())
+	return new Service(address, grpc.credentials.createInsecure()) as T
 }
 
 export default createGrpcClient

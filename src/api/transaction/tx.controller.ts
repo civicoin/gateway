@@ -11,6 +11,7 @@ export const sendTxHandler = async (
 
 	try {
 		console.log(body, user)
+
 		// 1. validate tx
 		// 2. choose the right core for the systen
 		// 3. send tx to the core query

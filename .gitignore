@@ -5,3 +5,4 @@ build
 setup/*key
 node_modules
 package-lock.json
+generated
