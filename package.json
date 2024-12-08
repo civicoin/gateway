@@ -40,7 +40,7 @@
 		"typescript": "5.3.3"
 	},
 	"dependencies": {
-		"@fastify/cors": "^8.5.0",
+		"@fastify/cors": "8.5.0",
 		"@fastify/jwt": "7.2.4",
 		"@fastify/swagger": "8.14.0",
 		"@fastify/swagger-ui": "2.1.0",

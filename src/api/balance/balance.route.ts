@@ -19,7 +19,7 @@ const balanceRoutes = async (app: FastifyInstance) => {
 				tags,
 				security: [
 					{
-						bearerAuth: []
+						Bearer: []
 					}
 				]
 			}

@@ -1,6 +1,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 
 import { SendTxInput } from './tx.schema.js'
+import { RabbitMQQueue } from '../../utils/rabbitmq.js'
 
 export const sendTxHandler = async (
 	request: FastifyRequest<{ Body: SendTxInput }>,
@@ -11,6 +12,12 @@ export const sendTxHandler = async (
 
 	try {
 		console.log(body, user)
+
+		request.rabbitmqPublish(RabbitMQQueue.tx, {
+			action: 'send',
+			from: '123',
+			to: '123'
+		})
 
 		// 1. validate tx
 		// 2. choose the right core for the systen

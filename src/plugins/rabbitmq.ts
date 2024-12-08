@@ -33,6 +33,13 @@ const rabbitmq = async (fastify: FastifyInstance) => {
 				})
 			}
 		})
+
+		fastify.decorateRequest(
+			'rabbitmqPublish',
+			async (queue: RabbitMQQueue, message: object) => {
+				await fastify.rabbitmq.publish(queue, message)
+			}
+		)
 	} catch (err) {
 		fastify.log.error('RabbitMQ error', err)
 	}

@@ -62,7 +62,7 @@ const swaggerOptions = {
 		consumes: ['application/json'],
 		produces: ['application/json'],
 		securityDefinitions: {
-			bearerAuth: {
+			Bearer: {
 				type: 'apiKey' as const,
 				name: 'Authorization',
 				in: 'header'
@@ -81,7 +81,14 @@ app.register(grpcClients)
 app.register(swagger, swaggerOptions)
 app.register(swaggerUi, swaggerUiOptions)
 app.register(cors, {
-  origin: true
+	origin: true
+})
+
+app.addHook('onRequest', async (req: FastifyRequest) => {
+	const authHeader = req.headers.authorization
+	if (authHeader && !authHeader.startsWith('Bearer ')) {
+		req.headers.authorization = `Bearer ${authHeader}`
+	}
 })
 
 app.decorate('authenticate', async (req: FastifyRequest, reply: FastifyReply) => {

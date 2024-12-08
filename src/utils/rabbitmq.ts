@@ -2,7 +2,12 @@ import { FastifyBaseLogger } from 'fastify'
 import amqp, { Connection, Channel } from 'amqplib'
 
 export enum RabbitMQQueue {
-	system = 'system'
+	system = 'system',
+	tx = 'tx'
+}
+
+export type BaseRabbitmqMesssage = {
+	action: string
 }
 
 class RabbitMQClient {

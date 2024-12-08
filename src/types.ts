@@ -9,6 +9,7 @@ declare module 'fastify' {
 	interface FastifyRequest {
 		user: UserPayload
 		core: CoreClient // change to general
+		rabbitmqPublish: (queue: RabbitMQQueue, message: object) => Promise<void>
 	}
 
 	export interface FastifyInstance {
