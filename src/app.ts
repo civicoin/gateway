@@ -59,7 +59,14 @@ const swaggerOptions = {
 		host: address,
 		schemes: ['http'],
 		consumes: ['application/json'],
-		produces: ['application/json']
+		produces: ['application/json'],
+		securityDefinitions: {
+			bearerAuth: {
+				type: 'apiKey' as const,
+				name: 'Authorization',
+				in: 'header'
+			}
+		}
 	}
 }
 
