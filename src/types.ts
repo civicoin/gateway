@@ -1,6 +1,6 @@
 import { RouteGenericInterface } from 'fastify'
 
-import type { ICoreClient } from './generated/core_grpc_pb.d.ts'
+import type { CoreClient } from './generated/core_grpc_pb.d.ts'
 
 import { RabbitMQQueue } from './utils/rabbitmq.js'
 import { GRPCCoreClients } from './plugins/grpcClient.js'
@@ -8,11 +8,15 @@ import { GRPCCoreClients } from './plugins/grpcClient.js'
 declare module 'fastify' {
 	interface FastifyRequest {
 		user: UserPayload
-		core: ICoreClient // change to general
+		core: CoreClient // change to general
 	}
 
 	export interface FastifyInstance {
 		authenticate: <T extends RouteGenericInterface = RouteGenericInterface>(
+			request: FastifyRequest<T>,
+			reply: FastifyReply
+		) => Promise<void>
+		core: <T extends RouteGenericInterface = RouteGenericInterface>(
 			request: FastifyRequest<T>,
 			reply: FastifyReply
 		) => Promise<void>
@@ -33,6 +37,7 @@ export enum UserRole {
 
 interface CommonUserPayload {
 	id: string
+	systemId: string
 }
 
 interface MemberPayload extends CommonUserPayload {

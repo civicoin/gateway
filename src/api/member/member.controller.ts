@@ -68,7 +68,7 @@ export const loginMemberHandler = async (
 			})
 		}
 
-		const toSign = { id: member.id, role: UserRole.MEMBER }
+		const toSign = { id: member.id, systemId: member.systemId, role: UserRole.MEMBER }
 
 		return reply.code(200).send({ accessToken: app.jwt.sign(toSign) })
 	} catch (err) {

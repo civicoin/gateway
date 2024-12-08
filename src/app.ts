@@ -14,9 +14,11 @@ import { RabbitMQQueue } from './utils/rabbitmq.js'
 import txRoutes from './api/transaction/tx.route.js'
 import systemRoutes from './api/system/system.route.js'
 import memberRoutes from './api/member/member.route.js'
+import balanceRoutes from './api/balance/balance.route.js'
 import { txSchemas } from './api/transaction/tx.schema.js'
 import { systemSchemas } from './api/system/system.schema.js'
 import { memberSchemas } from './api/member/member.schema.js'
+import { balanceSchemas } from './api/balance/balance.schema.js'
 
 dotenv.config()
 
@@ -25,7 +27,7 @@ if (![JWT_SECRET].every(Boolean)) {
 	throw new Error('Missing necessary environment variables')
 }
 
-const host = process.env.ADDRESS || '0.0.0.0'
+const host = process.env.ADDRESS || '127.0.0.1'
 const port = Number(process.env.PORT || 5000)
 const address = `${host}:${port}`
 
@@ -105,10 +107,11 @@ app.ready(async () => {
 const addSchemas = (schemas: JsonSchema[]) => schemas.forEach(schema => app.addSchema(schema))
 
 const main = async () => {
-	;[systemSchemas, memberSchemas, txSchemas].forEach(addSchemas)
+	;[systemSchemas, memberSchemas, txSchemas, balanceSchemas].forEach(addSchemas)
 	app.register(systemRoutes, { prefix: '/system' })
 	app.register(memberRoutes, { prefix: '/member' })
 	app.register(txRoutes, { prefix: '/tx' })
+	app.register(balanceRoutes, { prefix: '/balance' })
 
 	try {
 		await app.listen({ port, host })
