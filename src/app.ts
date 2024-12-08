@@ -1,6 +1,7 @@
 import chalk from 'chalk'
 import dotenv from 'dotenv'
 import fjwt from '@fastify/jwt'
+import cors from '@fastify/cors'
 import swagger from '@fastify/swagger'
 import { JsonSchema } from 'fastify-zod'
 import swaggerUi from '@fastify/swagger-ui'
@@ -79,6 +80,9 @@ app.register(rabbitmq)
 app.register(grpcClients)
 app.register(swagger, swaggerOptions)
 app.register(swaggerUi, swaggerUiOptions)
+app.register(cors, {
+  origin: true
+})
 
 app.decorate('authenticate', async (req: FastifyRequest, reply: FastifyReply) => {
 	try {
