@@ -1,9 +1,9 @@
 import { FastifyInstance } from 'fastify'
 import fastifyPlugin from 'fastify-plugin'
 
-import { safeJsonParse } from '../utils/data.js'
-import RabbitMQClient, { RabbitMQQueue } from '../utils/rabbitmq.js'
-import { getMessageWithHMAC, verifyMessageWithHMAC } from '../auth/hmac.js'
+import { safeJsonParse } from '../utils/data'
+import RabbitMQClient, { RabbitMQQueue } from '../utils/rabbitmq'
+import { getMessageWithHMAC, verifyMessageWithHMAC } from '../auth/hmac'
 
 const rabbitmq = async (fastify: FastifyInstance) => {
 	try {
@@ -14,8 +14,6 @@ const rabbitmq = async (fastify: FastifyInstance) => {
 			publish: async (queue: RabbitMQQueue, message: object) => {
 				await channel.assertQueue(queue, { durable: true })
 				const messageWithHMAC = getMessageWithHMAC(message)
-
-				console.log('SEND', JSON.stringify(messageWithHMAC))
 
 				channel.sendToQueue(queue, Buffer.from(JSON.stringify(messageWithHMAC)))
 			},

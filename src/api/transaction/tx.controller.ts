@@ -1,9 +1,9 @@
 import BigNumber from 'bignumber.js'
 import { FastifyRequest, FastifyReply } from 'fastify'
 
-import { SendTxInput } from './tx.schema.js'
-import { RabbitMQQueue } from '../../utils/rabbitmq.js'
-import { getUserBalance } from '../balance/balance.service.js'
+import { SendTxInput } from './tx.schema'
+import { RabbitMQQueue } from '../../utils/rabbitmq'
+import { getUserBalance } from '../balance/balance.service'
 
 export const sendTxHandler = async (
 	request: FastifyRequest<{ Body: SendTxInput }>,
@@ -14,7 +14,7 @@ export const sendTxHandler = async (
 
 	try {
 		const balance = await getUserBalance(request)
-		if (new BigNumber(balance).lessThan(new BigNumber(amount))) {
+		if (new BigNumber(balance).lessThan(amount)) {
 			return reply.code(400).send({
 				error: 'INSUFFICIENT_BALANCE', // todo: make error object
 				balance

@@ -1,10 +1,10 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 
-import { app } from '../../app.js'
-import { UserRole } from '../../types.js'
-import { verifyPassword } from '../../auth/hash.js'
-import { CreateSystemInput, LoginSystemInput } from './system.schema.js'
-import { createSystem, findSystem, findSystems } from './system.service.js'
+import { app } from '../../app'
+import { UserRole } from '../../types'
+import { verifyPassword } from '../../auth/hash'
+import { CreateSystemInput, LoginSystemInput } from './system.schema'
+import { createSystem, findSystem, findSystems } from './system.service'
 
 const notFoundReply = (reply: FastifyReply) =>
 	reply.code(404).send({

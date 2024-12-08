@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { buildJsonSchemas } from 'fastify-zod'
 
-import { getZodCommonErrorObject, withCreatedUpdated } from '../../utils/schema.js'
+import { getZodCommonErrorObject, withCreatedUpdated } from '../../utils/schema'
 
 enum Restriction {
 	PUBLIC = 'PUBLIC',

@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify'
 
-import { $ref } from './balance.schema.js'
-import { getBalance } from './balance.controller.js'
+import { $ref } from './balance.schema'
+import { getBalance } from './balance.controller'
 
 const tags = ['Balance']
 

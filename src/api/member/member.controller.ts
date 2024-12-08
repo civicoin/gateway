@@ -1,10 +1,10 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 
-import { app } from '../../app.js'
-import { UserRole } from '../../types.js'
-import { verifyPassword } from '../../auth/hash.js'
-import { findSystem } from '../system/system.service.js'
-import { CreateMemberInput, LoginMemberInput } from './member.schema.js'
+import { app } from '../../app'
+import { UserRole } from '../../types'
+import { verifyPassword } from '../../auth/hash'
+import { findSystem } from '../system/system.service'
+import { CreateMemberInput, LoginMemberInput } from './member.schema'
 import {
 	createMember,
 	defaultMemberFieldsToSelect,
@@ -118,8 +118,6 @@ export const getMemberPrivateKeyHandler = async (request: FastifyRequest, reply:
 
 	try {
 		const privateKeyData = await getMemberSecretEncryptedPrivateKey(id)
-		console.log(privateKeyData)
-
 		return reply.code(200).send(privateKeyData)
 	} catch (err) {
 		request.log.error(err)

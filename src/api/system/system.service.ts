@@ -1,9 +1,9 @@
 import { Core, System, SystemStatus } from '@prisma/client'
 
-import prisma from '../../utils/prisma.js'
-import { hashPassword } from '../../auth/hash.js'
-import { CreateSystemInput } from './system.schema.js'
-import { CursorBasedPagination, getPrismaOffsetPaginationArgs } from './../../utils/pagination.js'
+import prisma from '../../utils/prisma'
+import { hashPassword } from '../../auth/hash'
+import { CreateSystemInput } from './system.schema'
+import { CursorBasedPagination, getPrismaOffsetPaginationArgs } from './../../utils/pagination'
 
 const compulsoryFieldsToSelect = {
 	id: true,

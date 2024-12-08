@@ -1,12 +1,12 @@
 import { FastifyInstance } from 'fastify'
 
-import { $ref } from './member.schema.js'
+import { $ref } from './member.schema'
 import {
 	createMemberHandler,
 	getMemberHandler,
 	getMemberPrivateKeyHandler,
 	loginMemberHandler
-} from './member.controller.js'
+} from './member.controller'
 
 const tags = ['Member']
 

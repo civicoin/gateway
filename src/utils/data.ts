@@ -1,4 +1,4 @@
-import { logger } from '../app.js'
+import { logger } from '../app'
 
 export const safeJsonParse = (message: string): object => {
 	try {

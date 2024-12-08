@@ -2,8 +2,8 @@ import { z } from 'zod'
 import { MemberStatus } from '@prisma/client'
 import { buildJsonSchemas } from 'fastify-zod'
 
-import { withCreatedUpdated } from '../../utils/schema.js'
-import { getZodCommonErrorObject } from '../../utils/schema.js'
+import { withCreatedUpdated } from '../../utils/schema'
+import { getZodCommonErrorObject } from '../../utils/schema'
 
 const systemId = z.string(getZodCommonErrorObject('System ID')).uuid()
 

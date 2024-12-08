@@ -62,7 +62,6 @@ export const encryptEncryptedPrivateWithSecret = (
 }
 
 export const decryptDoubleEncryptedPrivateWithSecret = (encryptedData: DoubleEncryptedData) => {
-	console.log(encryptedData)
 	const secretKey = crypto.createHash('sha256').update(internalSecret).digest()
 	const decipher = crypto.createDecipheriv(
 		'aes-256-gcm',

@@ -1,9 +1,9 @@
 import { RouteGenericInterface } from 'fastify'
 
-import type { CoreClient } from './generated/core_grpc_pb.d.ts'
+import type { CoreClient } from './generated/core_grpc_pb'
 
-import { RabbitMQQueue } from './utils/rabbitmq.js'
-import { GRPCCoreClients } from './plugins/grpcClient.js'
+import { RabbitMQQueue } from './utils/rabbitmq'
+import { GRPCCoreClients } from './plugins/grpcClient'
 
 declare module 'fastify' {
 	interface FastifyRequest {

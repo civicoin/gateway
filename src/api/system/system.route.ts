@@ -1,12 +1,12 @@
 import { FastifyInstance } from 'fastify'
 
-import { $ref } from './system.schema.js'
+import { $ref } from './system.schema'
 import {
 	createSystemHandler,
 	getSystemHandler,
 	getSystemsHandler,
 	loginSystemHandler
-} from './system.controller.js'
+} from './system.controller'
 
 const tags = ['System']
 

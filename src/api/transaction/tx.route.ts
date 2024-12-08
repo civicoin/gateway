@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify'
 
-import { $ref } from './tx.schema.js'
-import { sendTxHandler } from './tx.controller.js'
+import { $ref } from './tx.schema'
+import { sendTxHandler } from './tx.controller'
 
 const tags = ['Transaction']
 

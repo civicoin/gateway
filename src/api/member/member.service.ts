@@ -1,14 +1,14 @@
 import { Member, MemberStatus } from '@prisma/client'
 
-import prisma from '../../utils/prisma.js'
-import { hashPassword } from '../../auth/hash.js'
-import { CreateMemberInput } from './member.schema.js'
+import prisma from '../../utils/prisma'
+import { hashPassword } from '../../auth/hash'
+import { CreateMemberInput } from './member.schema'
 import {
 	decryptDoubleEncryptedPrivateWithSecret,
 	encryptEncryptedPrivateWithSecret,
 	encryptPrivateWithPassword,
 	generateKeys
-} from '../../auth/keys.js'
+} from '../../auth/keys'
 
 const compulsoryFieldsToSelect = {
 	id: true,
