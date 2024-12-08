@@ -3,6 +3,7 @@ import { FastifyRequest, FastifyReply } from 'fastify'
 
 import { SendTxInput } from './tx.schema'
 import { RabbitMQQueue } from '../../utils/rabbitmq'
+import { findMember } from '../member/member.service'
 import { getUserBalance } from '../balance/balance.service'
 
 export const sendTxHandler = async (
@@ -18,6 +19,13 @@ export const sendTxHandler = async (
 			return reply.code(400).send({
 				error: 'INSUFFICIENT_BALANCE', // todo: make error object
 				balance
+			})
+		}
+
+		const receiver = await findMember({ systemId, id: receiverId })
+		if (!receiver) {
+			return reply.code(404).send({
+				error: 'RECEIVER_NOT_FOUND'
 			})
 		}
 
