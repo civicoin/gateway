@@ -10,9 +10,6 @@ export const getUserBalance = async (request: FastifyRequest) => {
 	const systemId = request.user.systemId
 	const userId = request.user.id
 
-	// const systemId = '9d77f542-cee0-4625-8c36-62d378ad699d'
-	// const userId = '54ea1230-8275-401f-8236-a6f2cb69015e'
-
 	const req = new GetBalanceRequest()
 	req.setSystemid(systemId)
 	req.setMemberid(userId)

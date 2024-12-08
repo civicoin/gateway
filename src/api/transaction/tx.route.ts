@@ -9,12 +9,17 @@ const txRoutes = async (app: FastifyInstance) => {
 	app.post(
 		'/send',
 		{
-			preHandler: [app.authenticate],
+			preHandler: [app.authenticate, app.core],
 			schema: {
 				description: 'Send coins to another member',
 				summary: 'Send coins to another member',
 				body: $ref('sendTxSchema'),
-				tags
+				tags,
+				security: [
+					{
+						Bearer: []
+					}
+				]
 			}
 		},
 		sendTxHandler

@@ -1,27 +1,38 @@
+import BigNumber from 'bignumber.js'
 import { FastifyRequest, FastifyReply } from 'fastify'
 
 import { SendTxInput } from './tx.schema.js'
 import { RabbitMQQueue } from '../../utils/rabbitmq.js'
+import { getUserBalance } from '../balance/balance.service.js'
 
 export const sendTxHandler = async (
 	request: FastifyRequest<{ Body: SendTxInput }>,
 	reply: FastifyReply
 ) => {
-	const body = request.body
-	const user = request.user
+	const { receiverId, amount, signature } = request.body
+	const { id: senderId, systemId } = request.user
 
 	try {
-		console.log(body, user)
+		const balance = await getUserBalance(request)
+		if (new BigNumber(balance).lessThan(new BigNumber(amount))) {
+			return reply.code(400).send({
+				error: 'INSUFFICIENT_BALANCE', // todo: make error object
+				balance
+			})
+		}
 
+		// set right queue for the appropriate core
+		// todo: make type for the message (at shared civi)
 		request.rabbitmqPublish(RabbitMQQueue.tx, {
 			action: 'send',
-			from: '123',
-			to: '123'
+			systemId,
+			senderId,
+			receiverId,
+			amount,
+			signature
 		})
 
-		// 1. validate tx
-		// 2. choose the right core for the systen
-		// 3. send tx to the core query
+		return reply.code(200).send('Transaction has been sent')
 	} catch (err) {
 		request.log.error(err)
 		return reply.code(500).send(err)

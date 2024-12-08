@@ -12,13 +12,15 @@ const rabbitmq = async (fastify: FastifyInstance) => {
 
 		fastify.decorate('rabbitmq', {
 			publish: async (queue: RabbitMQQueue, message: object) => {
-				await channel.assertQueue(queue, { durable: false })
+				await channel.assertQueue(queue, { durable: true })
 				const messageWithHMAC = getMessageWithHMAC(message)
+
+				console.log('SEND', JSON.stringify(messageWithHMAC))
 
 				channel.sendToQueue(queue, Buffer.from(JSON.stringify(messageWithHMAC)))
 			},
 			subscribe: async (queue: RabbitMQQueue, callback: (message: object) => void) => {
-				await channel.assertQueue(queue, { durable: false })
+				await channel.assertQueue(queue, { durable: true })
 				await channel.consume(queue, message => {
 					if (!message) return
 					const parsedMessage = safeJsonParse(message.content.toString())
