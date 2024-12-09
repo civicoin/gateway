@@ -5,6 +5,7 @@ import {
 	createMemberHandler,
 	getMemberHandler,
 	getMemberPrivateKeyHandler,
+	getMembersHandler,
 	loginMemberHandler
 } from './member.controller'
 
@@ -65,8 +66,27 @@ const memberRoutes = async (app: FastifyInstance) => {
 		getMemberPrivateKeyHandler
 	)
 	app.get(
-		'/:find',
+		'/',
 		{
+			preHandler: [app.authenticate],
+			schema: {
+				description: 'Find members by name',
+				summary: 'Get members',
+				response: {
+					200: {
+						type: 'array',
+						items: $ref('memberResponseSchema')
+					}
+				},
+				tags
+			}
+		},
+		getMembersHandler
+	)
+	app.get(
+		'/:id',
+		{
+			preHandler: [app.authenticate],
 			schema: {
 				description: 'Get member of authed system',
 				summary: 'Get member of authed system',

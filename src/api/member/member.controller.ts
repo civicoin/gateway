@@ -7,10 +7,15 @@ import { findSystem } from '../system/system.service'
 import { CreateMemberInput, LoginMemberInput } from './member.schema'
 import {
 	createMember,
-	defaultMemberFieldsToSelect,
 	findMember,
+	findMembers,
 	getMemberSecretEncryptedPrivateKey
 } from './member.service.js'
+
+const notFoundReply = (reply: FastifyReply) =>
+	reply.code(404).send({
+		message: 'Member not found'
+	})
 
 export const createMemberHandler = async (
 	request: FastifyRequest<{ Body: CreateMemberInput }>,
@@ -78,35 +83,43 @@ export const loginMemberHandler = async (
 }
 
 export const getMemberHandler = async (
-	request: FastifyRequest<{ Params: { find: string }; Querystring: { findBy: string } }>,
+	request: FastifyRequest<{ Params: { id: string } }>,
 	reply: FastifyReply
 ) => {
-	const systemId = '343da486-a6fa-44cd-b3e3-491018d30b52'
-	// const { findBy } = request.query
-	const { find } = request.params
+	const systemId = request.user.systemId
+	const { id } = request.params
 
 	try {
 		const member = await findMember({
 			systemId,
-			name: find,
-			select: {
-				...defaultMemberFieldsToSelect,
-				status: true,
-				system: {
-					select: {
-						id: true,
-						name: true
-					}
-				}
-			}
+			id
 		})
 		if (!member) {
-			return reply.code(404).send({
-				message: 'Member not found'
-			})
+			return notFoundReply(reply)
 		}
 
 		return reply.code(200).send(member)
+	} catch (err) {
+		request.log.error(err)
+		return reply.code(500).send(err)
+	}
+}
+
+export const getMembersHandler = async (
+	request: FastifyRequest<{ Querystring: { name: string; cursor?: string } }>,
+	reply: FastifyReply
+) => {
+	const systemId = request.user.systemId
+	const { name, cursor } = request.query
+
+	try {
+		const members = await findMembers({
+			systemId,
+			name,
+			cursor
+		})
+
+		return reply.code(200).send(members)
 	} catch (err) {
 		request.log.error(err)
 		return reply.code(500).send(err)
