@@ -86,10 +86,14 @@ export const getMemberHandler = async (
 	request: FastifyRequest<{ Params: { id: string } }>,
 	reply: FastifyReply
 ) => {
-	const systemId = request.user.systemId
-	const { id } = request.params
+	const { systemId, id: memberId } = request.user
+	let id = request.params.id
 
 	try {
+		if (id === 'me') {
+			id = memberId
+		}
+
 		const member = await findMember({
 			systemId,
 			id
