@@ -1,9 +1,11 @@
 import BigNumber from 'bignumber.js'
+import { IssuanceType } from '@prisma/client'
 import { FastifyRequest, FastifyReply } from 'fastify'
 
-import { SendTxInput } from './tx.schema'
 import { RabbitMQQueue } from '../../utils/rabbitmq'
 import { findMember } from '../member/member.service'
+import { findSystem } from '../system/system.service'
+import { IssueTxInput, SendTxInput } from './tx.schema'
 import { getUserBalance } from '../balance/balance.service'
 
 export const sendTxHandler = async (
@@ -41,6 +43,41 @@ export const sendTxHandler = async (
 		})
 
 		return reply.code(200).send('Transaction has been sent')
+	} catch (err) {
+		request.log.error(err)
+		return reply.code(500).send(err)
+	}
+}
+
+export const issueTxHandler = async (
+	request: FastifyRequest<{ Body: IssueTxInput }>,
+	reply: FastifyReply
+) => {
+	const { id } = request.user
+	const { receiverId, amount, signature } = request.body
+
+	try {
+		const system = await findSystem({ id })
+		if (!system) {
+			throw new Error(`System ${id} not found`)
+		}
+
+		const issuance = system.issuance
+		const type = issuance?.type || IssuanceType.UNLIMITED
+		// const limit = issuance?.limit || 0
+
+		if (type !== IssuanceType.UNLIMITED) {
+			throw new Error('Issuance type is not supported')
+		}
+
+		// set right queue for the appropriate core
+		request.rabbitmqPublish(RabbitMQQueue.tx, {
+			action: 'issue',
+			systemId: id,
+			receiverId,
+			amount,
+			signature
+		})
 	} catch (err) {
 		request.log.error(err)
 		return reply.code(500).send(err)

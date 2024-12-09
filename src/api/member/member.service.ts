@@ -3,6 +3,7 @@ import { Member, MemberStatus } from '@prisma/client'
 import prisma from '../../utils/prisma'
 import { hashPassword } from '../../auth/hash'
 import { CreateMemberInput } from './member.schema'
+import { CursorBasedPagination, getPrismaOffsetPaginationArgs } from '../../utils/pagination'
 import {
 	decryptDoubleEncryptedPrivateWithSecret,
 	encryptEncryptedPrivateWithSecret,
@@ -38,6 +39,22 @@ export const findMember = async ({
 			systemId
 		},
 		select: { ...compulsoryFieldsToSelect, ...select }
+	})
+}
+
+type FindMembers = { name: string; systemId: string } & CursorBasedPagination
+
+export const findMembers = async ({ name, systemId, cursor }: FindMembers) => {
+	return await prisma.member.findMany({
+		...getPrismaOffsetPaginationArgs(cursor, 10),
+		where: {
+			name: { contains: name, mode: 'insensitive' },
+			systemId
+		},
+		select: defaultMemberFieldsToSelect,
+		orderBy: {
+			id: 'asc'
+		}
 	})
 }
 

@@ -52,7 +52,7 @@ export const loginSystemHandler = async (
 			})
 		}
 
-		const toSign = { id: system.id, role: UserRole.ADMIN }
+		const toSign = { id: system.id, systemId: system.id, role: UserRole.ADMIN }
 
 		return reply.code(200).send({ accessToken: app.jwt.sign(toSign) })
 	} catch (err) {

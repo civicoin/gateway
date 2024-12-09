@@ -17,6 +17,10 @@ declare module 'fastify' {
 			request: FastifyRequest<T>,
 			reply: FastifyReply
 		) => Promise<void>
+		admin: <T extends RouteGenericInterface = RouteGenericInterface>(
+			request: FastifyRequest<T>,
+			reply: FastifyReply
+		) => Promise<void>
 		core: <T extends RouteGenericInterface = RouteGenericInterface>(
 			request: FastifyRequest<T>,
 			reply: FastifyReply

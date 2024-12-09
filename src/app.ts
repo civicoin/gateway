@@ -7,9 +7,9 @@ import { JsonSchema } from 'fastify-zod'
 import swaggerUi from '@fastify/swagger-ui'
 import fastify, { FastifyReply, FastifyRequest } from 'fastify'
 
-import { UserPayload } from './types'
 import rabbitmq from './plugins/rabbitmq'
 import grpcClients from './plugins/grpcClient'
+import { UserPayload, UserRole } from './types'
 import { RabbitMQQueue } from './utils/rabbitmq'
 
 import txRoutes from './api/transaction/tx.route'
@@ -95,6 +95,19 @@ app.decorate('authenticate', async (req: FastifyRequest, reply: FastifyReply) =>
 	try {
 		const decoded = await req.jwtVerify()
 		req.user = decoded as UserPayload
+	} catch (err) {
+		return reply.send(err)
+	}
+})
+
+app.decorate('admin', async (req: FastifyRequest, reply: FastifyReply) => {
+	try {
+		const { role } = req.user
+		if (role !== UserRole.ADMIN) {
+			return reply.code(403).send({
+				message: 'Forbidden'
+			})
+		}
 	} catch (err) {
 		return reply.send(err)
 	}

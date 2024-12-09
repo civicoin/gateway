@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify'
 
 import { $ref } from './tx.schema'
-import { sendTxHandler } from './tx.controller'
+import { issueTxHandler, sendTxHandler } from './tx.controller'
 
 const tags = ['Transaction']
 
@@ -23,6 +23,24 @@ const txRoutes = async (app: FastifyInstance) => {
 			}
 		},
 		sendTxHandler
+	)
+	app.post(
+		'/issue',
+		{
+			preHandler: [app.authenticate, app.admin, app.core],
+			schema: {
+				description: 'Issue coins to a member',
+				summary: 'Issue coins to a member',
+				body: $ref('issueTxSchema'),
+				tags,
+				security: [
+					{
+						Bearer: []
+					}
+				]
+			}
+		},
+		issueTxHandler
 	)
 }
 
