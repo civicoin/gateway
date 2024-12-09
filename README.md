@@ -7,6 +7,8 @@ The main service of the platform. Provides API, systems and members management, 
 -   External communication: REST with JWT
 -   Internal: gRPC and RabbitMQ with HMAC
 
+Now works with [the Core](https://github.com/civicoin/core)
+
 # Important notes
 
 -   On member creation we generate the keys pair (private/public), encrypt private with the member's password (before we hash it), then encrypt result with the secret and save. Member can get his encrypted with his password private after login, and decrypt it locally with the password. The private is used to sign the transactions (they will be verified at the Core with the public)
