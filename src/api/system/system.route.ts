@@ -42,7 +42,7 @@ const systemRoutes = async (app: FastifyInstance) => {
 		loginSystemHandler
 	)
 	app.get(
-		'/',
+		'/systems',
 		{
 			schema: {
 				description: 'Find systems by name',

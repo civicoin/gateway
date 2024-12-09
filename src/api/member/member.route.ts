@@ -66,7 +66,7 @@ const memberRoutes = async (app: FastifyInstance) => {
 		getMemberPrivateKeyHandler
 	)
 	app.get(
-		'/',
+		'/members',
 		{
 			preHandler: [app.authenticate],
 			schema: {

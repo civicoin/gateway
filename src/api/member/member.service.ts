@@ -14,7 +14,8 @@ import {
 const compulsoryFieldsToSelect = {
 	id: true,
 	name: true,
-	systemId: true
+	systemId: true,
+	status: true
 }
 
 export const defaultMemberFieldsToSelect = {
