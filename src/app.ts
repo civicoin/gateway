@@ -54,24 +54,22 @@ const swaggerOptions = {
 	openapi: {
 		// openapi: "3.0.3",
 		info: {
-      title: 'Civicoin Gateway API',
-      description: 'API documentation',
-      version: '0.1.0'
-    },
-    servers: [
-      {
-        url: `http://${address}`
-      }
-    ],
-    components: {
-      securitySchemes: {
-        Bearer: {
-          type: 'apiKey' as const,
-          in: 'header',
-          name: 'Authorization'
-        }
-      }
-    }
+			title: 'Civicoin Gateway API',
+			description: 'API documentation',
+			version: '0.1.0'
+		},
+		servers: [
+			{ url: `http://${address}` }
+		],
+		components: {
+			securitySchemes: {
+				Bearer: {
+					type: 'apiKey' as const,
+					in: 'header',
+					name: 'Authorization'
+				}
+			}
+		}
 	}
 }
 

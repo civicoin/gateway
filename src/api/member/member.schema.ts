@@ -47,10 +47,7 @@ const memberResponseSchema = z.object(
 		...memberCommonFields,
 		id: z.string(),
 		status: z.nativeEnum(MemberStatus),
-		system: z.object({
-			id: z.string(),
-			name: z.string()
-		})
+		systemId
 	})
 )
 

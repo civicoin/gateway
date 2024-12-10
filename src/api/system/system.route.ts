@@ -12,7 +12,7 @@ const tags = ['System']
 
 const systemRoutes = async (app: FastifyInstance) => {
 	app.post(
-		'/',
+		'',
 		{
 			schema: {
 				description: 'Create a new system',
@@ -47,6 +47,12 @@ const systemRoutes = async (app: FastifyInstance) => {
 			schema: {
 				description: 'Find systems by name',
 				summary: 'Get systems',
+				querystring: {
+					type: 'object',
+					properties: {
+						name: { type: 'string' }
+					}
+				},
 				response: {
 					200: {
 						type: 'array',
