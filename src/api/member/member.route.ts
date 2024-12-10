@@ -13,7 +13,7 @@ const tags = ['Member']
 
 const memberRoutes = async (app: FastifyInstance) => {
 	app.post(
-		'/',
+		'',
 		{
 			schema: {
 				description: 'Create a new member',
@@ -49,6 +49,11 @@ const memberRoutes = async (app: FastifyInstance) => {
 			schema: {
 				description: 'Get member private key',
 				summary: 'Get member private key',
+				security: [
+					{
+						Bearer: []
+					}
+				],
 				response: {
 					200: {
 						type: 'object',
@@ -72,6 +77,17 @@ const memberRoutes = async (app: FastifyInstance) => {
 			schema: {
 				description: 'Find members by name',
 				summary: 'Get members',
+				querystring: {
+					type: 'object',
+					properties: {
+						name: { type: 'string' }
+					}
+				},
+				security: [
+					{
+						Bearer: []
+					}
+				],
 				response: {
 					200: {
 						type: 'array',
@@ -93,6 +109,11 @@ const memberRoutes = async (app: FastifyInstance) => {
 				response: {
 					200: $ref('memberResponseSchema')
 				},
+				security: [
+					{
+						Bearer: []
+					}
+				],
 				tags
 			}
 		},

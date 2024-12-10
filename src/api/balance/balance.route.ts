@@ -7,7 +7,7 @@ const tags = ['Balance']
 
 const balanceRoutes = async (app: FastifyInstance) => {
 	app.get(
-		'/',
+		'',
 		{
 			preHandler: [app.authenticate, app.core],
 			schema: {
