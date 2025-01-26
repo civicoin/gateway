@@ -3,6 +3,7 @@ import { FastifyRequest, FastifyReply } from 'fastify'
 import { app } from '../../app'
 import { UserRole } from '../../types'
 import { verifyPassword } from '../../auth/hash'
+import { ME_ENDPOINT } from '../../utils/consts'
 import { findSystem } from '../system/system.service'
 import { CreateMemberInput, LoginMemberInput } from './member.schema'
 import {
@@ -90,7 +91,7 @@ export const getMemberHandler = async (
 	let id = request.params.id
 
 	try {
-		if (id === 'me') {
+		if (id === ME_ENDPOINT) {
 			id = memberId
 		}
 

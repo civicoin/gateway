@@ -3,6 +3,7 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { app } from '../../app'
 import { UserRole } from '../../types'
 import { verifyPassword } from '../../auth/hash'
+import { ME_ENDPOINT } from '../../utils/consts'
 import { CreateSystemInput, LoginSystemInput } from './system.schema'
 import { createSystem, findSystem, findSystems } from './system.service'
 
@@ -65,9 +66,14 @@ export const getSystemHandler = async (
 	request: FastifyRequest<{ Params: { id: string } }>,
 	reply: FastifyReply
 ) => {
-	const { id } = request.params
+	const { systemId } = request.user
+	let id = request.params.id
 
 	try {
+		if (id === ME_ENDPOINT) {
+			id = systemId
+		}
+
 		const system = await findSystem({ id })
 		if (!system) return notFoundReply(reply)
 
