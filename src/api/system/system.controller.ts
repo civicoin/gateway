@@ -66,12 +66,13 @@ export const getSystemHandler = async (
 	request: FastifyRequest<{ Params: { id: string } }>,
 	reply: FastifyReply
 ) => {
-	const { systemId } = request.user
+	const user = request.user
+	const authedSystemId = user?.role === UserRole.ADMIN ? user?.id : user?.systemId
 	let id = request.params.id
 
 	try {
-		if (id === ME_ENDPOINT) {
-			id = systemId
+		if (authedSystemId && authedSystemId === ME_ENDPOINT) {
+			id = authedSystemId
 		}
 
 		const system = await findSystem({ id })
