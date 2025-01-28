@@ -3,7 +3,6 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { app } from '../../app'
 import { UserRole } from '../../types'
 import { verifyPassword } from '../../auth/hash'
-import { ME_ENDPOINT } from '../../utils/consts'
 import { CreateSystemInput, LoginSystemInput } from './system.schema'
 import { createSystem, findSystem, findSystems } from './system.service'
 
@@ -62,20 +61,27 @@ export const loginSystemHandler = async (
 	}
 }
 
-export const getSystemHandler = async (
+export const getMySystemHandler = async (request: FastifyRequest, reply: FastifyReply) => {
+	const user = request.user
+	const authedSystemId = user?.role === UserRole.ADMIN ? user?.id : user?.systemId
+
+	try {
+		const system = await findSystem({ id: authedSystemId }) // more info
+		if (!system) return notFoundReply(reply)
+
+		return reply.code(200).send(system)
+	} catch (err) {
+		request.log.error(err)
+		return reply.code(500).send(err)
+	}
+}
+
+export const getPublicSystemHandler = async (
 	request: FastifyRequest<{ Params: { id: string } }>,
 	reply: FastifyReply
 ) => {
-	const user = request.user
-	const authedSystemId = user?.role === UserRole.ADMIN ? user?.id : user?.systemId
-	let id = request.params.id
-
 	try {
-		if (authedSystemId && authedSystemId === ME_ENDPOINT) {
-			id = authedSystemId
-		}
-
-		const system = await findSystem({ id })
+		const system = await findSystem({ id: request.params.id }) // less info
 		if (!system) return notFoundReply(reply)
 
 		return reply.code(200).send(system)

@@ -3,7 +3,8 @@ import { FastifyInstance } from 'fastify'
 import { $ref } from './system.schema'
 import {
 	createSystemHandler,
-	getSystemHandler,
+	getMySystemHandler,
+	getPublicSystemHandler,
 	getSystemsHandler,
 	loginSystemHandler
 } from './system.controller'
@@ -26,6 +27,7 @@ const systemRoutes = async (app: FastifyInstance) => {
 		},
 		createSystemHandler
 	)
+
 	app.post(
 		'/login',
 		{
@@ -41,6 +43,7 @@ const systemRoutes = async (app: FastifyInstance) => {
 		},
 		loginSystemHandler
 	)
+
 	app.get(
 		'/systems',
 		{
@@ -64,19 +67,41 @@ const systemRoutes = async (app: FastifyInstance) => {
 		},
 		getSystemsHandler
 	)
+
 	app.get(
-		'/:id',
+		'/me',
 		{
+			preHandler: [app.authenticate],
 			schema: {
-				description: 'Get system',
-				summary: 'Get system',
+				description: 'Get my system info',
+				summary: 'Get my system info',
+				security: [
+					{
+						Bearer: []
+					}
+				],
 				response: {
 					200: $ref('systemResponseSchema')
 				},
 				tags
 			}
 		},
-		getSystemHandler
+		getMySystemHandler
+	)
+
+	app.get(
+		'/:id',
+		{
+			schema: {
+				description: 'Get public info of the system',
+				summary: 'Get public info of the system',
+				response: {
+					200: $ref('systemResponseSchema')
+				},
+				tags
+			}
+		},
+		getPublicSystemHandler
 	)
 }
 

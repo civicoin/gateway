@@ -13,6 +13,7 @@ import { UserPayload, UserRole } from './types'
 import { RabbitMQQueue } from './utils/rabbitmq'
 
 import txRoutes from './api/transaction/tx.route'
+import { checkRole } from './api/decorators/role'
 import systemRoutes from './api/system/system.route'
 import memberRoutes from './api/member/member.route'
 import balanceRoutes from './api/balance/balance.route'
@@ -58,9 +59,7 @@ const swaggerOptions = {
 			description: 'API documentation',
 			version: '0.1.0'
 		},
-		servers: [
-			{ url: `http://${address}` }
-		],
+		servers: [{ url: `http://${address}` }],
 		components: {
 			securitySchemes: {
 				Bearer: {
@@ -102,18 +101,13 @@ app.decorate('authenticate', async (req: FastifyRequest, reply: FastifyReply) =>
 	}
 })
 
-app.decorate('admin', async (req: FastifyRequest, reply: FastifyReply) => {
-	try {
-		const { role } = req.user
-		if (role !== UserRole.ADMIN) {
-			return reply.code(403).send({
-				message: 'Forbidden'
-			})
-		}
-	} catch (err) {
-		return reply.send(err)
-	}
-})
+app.decorate('admin', async (req: FastifyRequest, reply: FastifyReply) =>
+	checkRole(req, reply, UserRole.ADMIN)
+)
+
+app.decorate('member', async (req: FastifyRequest, reply: FastifyReply) =>
+	checkRole(req, reply, UserRole.MEMBER)
+)
 
 app.decorate('core', async (req: FastifyRequest, reply: FastifyReply) => {
 	try {
