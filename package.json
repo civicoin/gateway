@@ -1,20 +1,20 @@
 {
 	"name": "gateway",
-	"main": "app.js",
+	"main": "dist/app.js",
 	"version": "1.0.0",
 	"description": "The main service of Civicoin",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"proto:clear": "rm -rf src/generated && mkdir src/generated",
+		"proto:generate": "npm run proto:clear && protoc --plugin=node_modules/ts-proto/protoc-gen-ts_proto --ts_proto_out=./src/generated --ts_proto_opt=esModuleInterop=true,outputServices=grpc-js,env=node -I ./node_modules/civi/protos/ ./node_modules/civi/protos/*.proto",
 		"dev": "tsx watch src/app.ts",
-		"build": "tsc",
+		"build": "rm -rf dist && mkdir dist && mkdir ./dist/generated && tsc && tsc-alias",
 		"start": "node dist/app.js",
 		"lint": "eslint . --ext .ts",
 		"format": "prettier --write \"src/**/*.{ts,tsx,json}\"",
 		"clean": "rm -rf dist/",
 		"prebuild": "npm run clean",
-		"proto:clear": "rm -rf src/generated && mkdir src/generated",
-		"proto:generate": "npm run proto:clear && grpc_tools_node_protoc --plugin=protoc-gen-grpc=`which grpc_tools_node_protoc_plugin` --js_out=import_style=commonjs,binary:./src/generated --grpc_out=grpc_js:./src/generated --ts_out=grpc_js:./src/generated -I ./node_modules/civi/protos/ ./node_modules/civi/protos/*.proto"
-  },
+		"db:deploy": "npx prisma migrate deploy && npx prisma generate"
+	},
 	"type": "module",
 	"repository": "https://github.com/civicoin/gateway.git",
 	"author": "Civicoin",
@@ -27,15 +27,14 @@
 		"@typescript-eslint/eslint-plugin": "6.17.0",
 		"@typescript-eslint/parser": "6.17.0",
 		"civi": "git://github.com/civicoin/civi.git",
-		"grpc_tools_node_protoc_ts": "5.3.3",
-		"grpc-tools": "1.12.4",
 		"eslint": "8.56.0",
 		"eslint-config-prettier": "9.1.0",
 		"eslint-plugin-perfectionist": "2.5.0",
 		"eslint-plugin-prettier": "5.1.2",
 		"pino-pretty": "10.3.1",
 		"prettier": "3.1.1",
-		"prisma": "5.14.0",
+		"ts-proto": "2.6.1",
+		"tsc-alias": "1.8.10",
 		"tsx": "4.7.0",
 		"typescript": "5.3.3"
 	},
@@ -46,17 +45,20 @@
 		"@fastify/swagger-ui": "2.1.0",
 		"@grpc/grpc-js": "1.11.1",
 		"@grpc/proto-loader": "0.7.13",
+		"@bufbuild/protobuf": "2.2.3",
 		"@noble/secp256k1": "^2.1.0",
 		"@prisma/client": "5.7.1",
+		"prisma": "5.14.0",
 		"amqplib": "0.10.3",
 		"bcrypt": "5.1.1",
+		"bignumber.js": "4.0.4",
 		"chalk": "5.3.0",
 		"dotenv": "16.3.1",
 		"fastify": "4.25.2",
 		"fastify-plugin": "4.5.1",
 		"fastify-zod": "1.4.0",
-		"zod": "3.23.8",
-		"bignumber.js": "4.0.4"
+		"zod": "3.23.8"
+
 	},
 	"engines": {
 		"node": "22"

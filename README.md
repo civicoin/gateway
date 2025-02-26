@@ -50,7 +50,7 @@ For Windows just copy generated key to `setup` folder
 **Start it using Docker:**
 
 ```
-docker build -t gateway-mongo -f ./setup/DOCKERFILE setup
+docker build -t gateway-mongo -f ./setup/MONGO.DOCKERFILE setup
 docker-compose -f ./setup/mongo-compose.yml --env-file .env up -d
 ```
 

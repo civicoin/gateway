@@ -1,6 +1,6 @@
 import { RouteGenericInterface } from 'fastify'
 
-import type { CoreClient } from './generated/core_grpc_pb'
+import type { CoreClient } from './generated/core'
 
 import { RabbitMQQueue } from './utils/rabbitmq'
 import { GRPCCoreClients } from './plugins/grpcClient'
@@ -8,7 +8,7 @@ import { GRPCCoreClients } from './plugins/grpcClient'
 declare module 'fastify' {
 	interface FastifyRequest {
 		user: UserPayload
-		core: CoreClient // change to general
+		core: CoreClient
 		rabbitmqPublish: (queue: RabbitMQQueue, message: object) => Promise<void>
 	}
 

@@ -1,11 +1,30 @@
 {
 	"compilerOptions": {
-	  "strict": true,
-	  "esModuleInterop": true,
-	  "forceConsistentCasingInFileNames": true,
-	  "skipLibCheck": true,
-	  "target": "ES2020",
-	  "module": "ES2020",
-	  "moduleResolution": "node"
+		"rootDir": "./src",
+		"outDir": "./dist",
+		"strict": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"skipLibCheck": true,
+		"target": "ES2022",
+		"module": "ES2022",
+		"moduleResolution": "node",
+		"allowJs": true
+	},
+	"include": [
+		"./src"
+	],
+	"tsc-alias": {
+		"verbose": false,
+		"resolveFullPaths": true,
+		"fileExtensions": {
+			"inputGlob": "{js,jsx,mjs}",
+			"outputCheck": [
+				"js",
+				"json",
+				"jsx",
+				"mjs"
+			]
+		}
 	}
 }

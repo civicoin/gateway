@@ -1,23 +1,21 @@
 import * as grpc from '@grpc/grpc-js'
-import { createRequire } from 'module'
 import { FastifyInstance } from 'fastify'
 import fastifyPlugin from 'fastify-plugin'
 
-const require = createRequire(import.meta.url)
-const { CoreClient } = require('./../generated/core_grpc_pb')
+import { CoreClient } from '../generated/core'
 
 export enum GRPCCoreService {
 	CORE = 'Core'
 }
 
 export type GRPCCoreClients = {
-	[GRPCCoreService.CORE]: typeof CoreClient
+	[GRPCCoreService.CORE]: CoreClient
 }
 
 const coreServices = [
 	{
-		internalName: 'core1',
-		ServiceClient: CoreClient,
+		internalName: 'core',
+		serviceClient: GRPCCoreService.CORE,
 		name: GRPCCoreService.CORE,
 		protoFile: 'core.proto',
 		address: process.env.CORE_GRPC_URL ?? ''
@@ -26,8 +24,16 @@ const coreServices = [
 
 const grpcClients = async (fastify: FastifyInstance) => {
 	try {
-		const coreClients = coreServices.reduce((clients, { name, ServiceClient, address }) => {
-			clients[name] = new ServiceClient(address, grpc.credentials.createInsecure())
+		const servicesClients = {
+			[GRPCCoreService.CORE]: CoreClient
+		}
+
+		const coreClients = coreServices.reduce((clients, { name, serviceClient, address }) => {
+			clients[name] = new servicesClients[serviceClient](
+				address,
+				grpc.credentials.createInsecure()
+			)
+
 			return clients
 		}, {} as GRPCCoreClients)
 
@@ -35,6 +41,7 @@ const grpcClients = async (fastify: FastifyInstance) => {
 			coreClients
 		})
 	} catch (err) {
+		console.error(err)
 		fastify.log.error(`gRPC error: ${err}`)
 	}
 }

@@ -1,7 +1,9 @@
 services:
     mongo1:
         hostname: mongo1
-        image: gateway-mongo
+        build:
+            context: .
+            dockerfile: ./MONGO.DOCKERFILE
         ports:
             - 27701:27701
         restart: on-failure
@@ -13,7 +15,9 @@ services:
             - internal
     mongo2:
         hostname: mongo2
-        image: gateway-mongo
+        build:
+            context: .
+            dockerfile: ./MONGO.DOCKERFILE
         ports:
             - 27702:27702
         restart: on-failure
@@ -23,13 +27,15 @@ services:
             MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INIT_PASSWORD}
         networks:
             - internal
-    mongoInit:
-        image: gateway-mongo
-        restart: "no"
+    mongoinit:
+        build:
+            context: .
+            dockerfile: ./MONGO.DOCKERFILE
+        restart: 'no'
         depends_on:
             - mongo1
             - mongo2
-        entrypoint: ["/bin/bash", "/scripts/mongodb_rs_init.sh"]
+        entrypoint: ['/bin/bash', '/scripts/mongodb_rs_init.sh']
         environment:
             MONGO_INITDB_ROOT_USERNAME: ${MONGO_INIT_USERNAME}
             MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INIT_PASSWORD}
@@ -38,7 +44,33 @@ services:
             MONGO_DATABASE: ${MONGO_DATABASE}
         networks:
             - internal
-
+    rabbitmq:
+        hostname: rabbitmq
+        image: rabbitmq:3-management
+        ports:
+            - 5672:5672
+            - 15672:15672
+        restart: on-failure
+        networks:
+            - internal
+    gateway:
+        hostname: gateway
+        build:
+            context: ..
+            dockerfile: ./setup/DOCKERFILE
+        ports:
+            - 8080:8080
+        restart: on-failure
+        depends_on:
+            - mongo1
+            - mongo2
+            - mongoinit
+            - rabbitmq
+        networks:
+            - internal
+            - external
 networks:
     internal:
+        driver: bridge
+    external:
         driver: bridge
