@@ -41,7 +41,7 @@ const rabbitmq = async (fastify: FastifyInstance) => {
 			}
 		)
 	} catch (err) {
-		fastify.log.error('RabbitMQ error', err)
+		fastify.log.error(`RabbitMQ error: ${err}`)
 	}
 }
 

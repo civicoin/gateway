@@ -9,9 +9,13 @@ The main service of the platform. Provides API, systems and members management, 
 
 Now works with [the Core](https://github.com/civicoin/core)
 
-# Important notes
+# Docker
 
--   On member creation we generate the keys pair (private/public), encrypt private with the member's password (before we hash it), then encrypt result with the secret and save. Member can get his encrypted with his password private after login, and decrypt it locally with the password. The private is used to sign the transactions (they will be verified at the Core with the public)
+Run Gateway, Mongo (replicas set) and RabbitMQ
+
+```
+docker compose -p civicoin -f ./setup/docker-compose.yml up -d
+```
 
 # Development
 
@@ -76,6 +80,10 @@ Management can then be accessible at `http://127.0.0.1:15672` with the default c
 ## Environment variables
 
 Check `.env.example`
+
+# Important notes
+
+-   [In progress] On member creation we generate the keys pair (private/public), encrypt private with the member's password (before we hash it), then encrypt result with the secret and save. Member can get his encrypted with his password private after login, and decrypt it locally with the password. The private is used to sign the transactions (they will be verified at the Core with the public)
 
 # WTF is going on here
 

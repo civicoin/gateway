@@ -29,7 +29,7 @@ if (![JWT_SECRET].every(Boolean)) {
 	throw new Error('Missing necessary environment variables')
 }
 
-const host = process.env.ADDRESS || '127.0.0.1'
+const host = process.env.ADDRESS || '0.0.0.0'
 const port = Number(process.env.PORT || 5000)
 const address = `${host}:${port}`
 

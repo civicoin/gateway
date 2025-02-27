@@ -8,9 +8,13 @@ services:
             - 27701:27701
         restart: on-failure
         command: mongod --bind_ip_all --replSet mongo-set --port 27701 --keyFile /etc/mongo-key
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: ${MONGO_INIT_USERNAME}
-            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INIT_PASSWORD}
+        healthcheck:
+            test: echo 'db.runCommand("ping").ok' | mongosh --quiet mongodb://mongo1:27701
+            interval: 10s
+            timeout: 10s
+            retries: 5
+        env_file:
+            - ./.docker.env
         networks:
             - internal
     mongo2:
@@ -22,9 +26,13 @@ services:
             - 27702:27702
         restart: on-failure
         command: mongod --bind_ip_all --replSet mongo-set --port 27702 --keyFile /etc/mongo-key
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: ${MONGO_INIT_USERNAME}
-            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INIT_PASSWORD}
+        healthcheck:
+            test: echo 'db.runCommand("ping").ok' | mongosh --quiet mongodb://mongo2:27702
+            interval: 10s
+            timeout: 10s
+            retries: 5
+        env_file:
+            - ./.docker.env
         networks:
             - internal
     mongoinit:
@@ -33,15 +41,13 @@ services:
             dockerfile: ./MONGO.DOCKERFILE
         restart: 'no'
         depends_on:
-            - mongo1
-            - mongo2
+            mongo1:
+                condition: service_healthy
+            mongo2:
+                condition: service_healthy
         entrypoint: ['/bin/bash', '/scripts/mongodb_rs_init.sh']
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: ${MONGO_INIT_USERNAME}
-            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INIT_PASSWORD}
-            MONGO_USERNAME: ${MONGO_USERNAME}
-            MONGO_PASSWORD: ${MONGO_PASSWORD}
-            MONGO_DATABASE: ${MONGO_DATABASE}
+        env_file:
+            - ./.docker.env
         networks:
             - internal
     rabbitmq:
@@ -51,6 +57,13 @@ services:
             - 5672:5672
             - 15672:15672
         restart: on-failure
+        healthcheck:
+            test: rabbitmq-diagnostics -q ping
+            interval: 5s
+            timeout: 60s
+            retries: 10
+        env_file:
+            - ./.docker.env
         networks:
             - internal
     gateway:
@@ -59,13 +72,19 @@ services:
             context: ..
             dockerfile: ./setup/DOCKERFILE
         ports:
-            - 8080:8080
+            - 5000:5000
         restart: on-failure
         depends_on:
-            - mongo1
-            - mongo2
-            - mongoinit
-            - rabbitmq
+            mongo1:
+                condition: service_healthy
+            mongo2:
+                condition: service_healthy
+            mongoinit:
+                condition: service_completed_successfully
+            rabbitmq:
+                condition: service_healthy
+        env_file:
+            - ./.docker.env
         networks:
             - internal
             - external

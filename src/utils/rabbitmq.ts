@@ -1,5 +1,8 @@
+import dotenv from 'dotenv'
 import { FastifyBaseLogger } from 'fastify'
 import amqp, { Connection, Channel } from 'amqplib'
+
+dotenv.config()
 
 export enum RabbitMQQueue {
 	system = 'system',
@@ -13,7 +16,7 @@ export type BaseRabbitmqMesssage = {
 class RabbitMQClient {
 	private static instance: RabbitMQClient
 	private logger: FastifyBaseLogger | null = null
-	private readonly url: string = process.env.RABBITMQ_URL || 'amqp://localhost'
+	private readonly url: string = process.env.RABBITMQ_URL ?? 'amqp://localhost'
 
 	private channel: Channel | null = null
 	private connection: Connection | null = null
