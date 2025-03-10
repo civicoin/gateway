@@ -90,6 +90,7 @@ services:
             - external
 networks:
     internal:
-        driver: bridge
+        name: shared_internal_network
+        external: true
     external:
         driver: bridge
