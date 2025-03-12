@@ -58,7 +58,6 @@
 		"fastify-plugin": "4.5.1",
 		"fastify-zod": "1.4.0",
 		"zod": "3.23.8"
-
 	},
 	"engines": {
 		"node": "22"
