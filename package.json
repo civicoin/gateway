@@ -7,7 +7,7 @@
 		"proto:clear": "rm -rf src/generated && mkdir src/generated",
 		"proto:generate": "npm run proto:clear && protoc --plugin=node_modules/ts-proto/protoc-gen-ts_proto --ts_proto_out=./src/generated --ts_proto_opt=esModuleInterop=true,outputServices=grpc-js,env=node -I ./node_modules/civi/protos/ ./node_modules/civi/protos/*.proto",
 		"dev": "tsx watch src/app.ts",
-		"build": "rm -rf dist && mkdir dist && mkdir ./dist/generated && tsc && ts-alias",
+		"build": "rm -rf dist && mkdir dist && mkdir ./dist/generated && tsc && tsc-alias",
 		"start": "node dist/app.js",
 		"lint": "eslint . --ext .ts",
 		"format": "prettier --write \"src/**/*.{ts,tsx,json}\"",
