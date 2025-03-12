@@ -1,7 +1,7 @@
 import { z } from 'zod'
-import { MemberStatus } from '@prisma/client'
 import { buildJsonSchemas } from 'fastify-zod'
 
+import { MemberStatus } from '../../db'
 import { withCreatedUpdated } from '../../utils/schema'
 import { getZodCommonErrorObject } from '../../utils/schema'
 

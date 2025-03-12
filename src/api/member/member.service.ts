@@ -1,7 +1,6 @@
-import { Member, MemberStatus } from '@prisma/client'
-
 import prisma from '../../utils/prisma'
 import { hashPassword } from '../../auth/hash'
+import { Member, MemberStatus } from '../../db'
 import { CreateMemberInput } from './member.schema'
 import { CursorBasedPagination, getPrismaOffsetPaginationArgs } from '../../utils/pagination'
 import {

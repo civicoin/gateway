@@ -34,7 +34,7 @@ After schema update run `prisma db push`
 
 First, install Node packages — `npm i`
 
-Generate Prisma schema — `npx prisma generate`
+Generate Prisma schema and DB files — `npm run db:client`
 
 Generate gRPC — `npm run proto:generate`
 

@@ -6,3 +6,4 @@ setup/*key
 node_modules
 generated
 dist
+src/db

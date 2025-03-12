@@ -13,7 +13,7 @@
 		"format": "prettier --write \"src/**/*.{ts,tsx,json}\"",
 		"clean": "rm -rf dist/",
 		"prebuild": "npm run clean",
-		"db:deploy": "npx prisma migrate deploy && npx prisma generate"
+		"db:client": "npx prisma generate"
 	},
 	"type": "module",
 	"repository": "https://github.com/civicoin/gateway.git",
