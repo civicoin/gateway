@@ -15,6 +15,7 @@ Run Gateway, Mongo (replicas set) and RabbitMQ
 
 ```
 openssl rand -base64 756 > ./setup/mongo-key
+docker network create --internal shared_internal_network
 docker compose -p civicoin -f ./setup/docker-compose.yml up -d
 ```
 
