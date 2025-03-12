@@ -5,6 +5,7 @@ RUN apt-get update -y && apt-get install -y openssl git
 WORKDIR /app
 
 COPY package*.json ./
+COPY package-lock.json ./
 
 COPY . .
 
