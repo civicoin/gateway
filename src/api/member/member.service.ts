@@ -1,6 +1,7 @@
+import prismaDb from '../../db'
+import { Member } from '../../db'
 import prisma from '../../utils/prisma'
 import { hashPassword } from '../../auth/hash'
-import { Member, MemberStatus } from '../../db'
 import { CreateMemberInput } from './member.schema'
 import { CursorBasedPagination, getPrismaOffsetPaginationArgs } from '../../utils/pagination'
 import {
@@ -9,6 +10,8 @@ import {
 	encryptPrivateWithPassword,
 	generateKeys
 } from '../../auth/keys'
+
+const { MemberStatus } = prismaDb
 
 const compulsoryFieldsToSelect = {
 	id: true,
