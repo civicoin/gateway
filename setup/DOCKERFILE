@@ -5,9 +5,10 @@ RUN apt-get update -y && apt-get install -y openssl git
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install
 
 COPY . .
+
+RUN npm ci
 
 RUN npx prisma generate
 RUN npm run proto:generate
