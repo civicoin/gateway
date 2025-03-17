@@ -1,5 +1,5 @@
-import prismaDb from '../../db'
-import { Member } from '../../db'
+import { Member, MemberStatus } from '@prisma/client'
+
 import prisma from '../../utils/prisma'
 import { hashPassword } from '../../auth/hash'
 import { CreateMemberInput } from './member.schema'
@@ -10,8 +10,6 @@ import {
 	encryptPrivateWithPassword,
 	generateKeys
 } from '../../auth/keys'
-
-const { MemberStatus } = prismaDb
 
 const compulsoryFieldsToSelect = {
 	id: true,

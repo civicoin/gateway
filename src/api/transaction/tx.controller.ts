@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
+import { IssuanceType } from '@prisma/client'
 import { FastifyRequest, FastifyReply } from 'fastify'
 
-import { IssuanceType } from '../../db'
 import { RabbitMQQueue } from '../../utils/rabbitmq'
 import { findMember } from '../member/member.service'
 import { findSystem } from '../system/system.service'

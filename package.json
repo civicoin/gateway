@@ -60,6 +60,9 @@
 		"fastify-zod": "1.4.0",
 		"zod": "3.23.8"
 	},
+	"prisma": {
+    	"schema": "./src/prisma/schema.prisma"
+  	},
 	"engines": {
 		"node": "22"
 	}
